@@ -1,3 +1,3 @@
 # meetup-presentations_lancaster
 
-Test
+2019-05-01: Lauch event
