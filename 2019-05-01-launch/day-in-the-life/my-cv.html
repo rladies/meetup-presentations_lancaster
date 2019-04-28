@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="author" content="Rhian Davies" />
+    <meta name="date" content="2019-04-28" />
+    <title>Rhian Davies’s resume</title>
+
+        <link href="my-cv_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="my-cv_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="my-cv_files/paged-0.2.5/css/resume.css" rel="stylesheet" />
+    <script src="my-cv_files/paged-0.2.5/js/config.js"></script>
+    <script src="my-cv_files/paged-0.2.5/js/paged.js"></script>
+    <script src="my-cv_files/paged-0.2.5/js/hooks.js"></script>
+    
+    
+  </head>
+  <body>
+
+<div id="aside" class="section level1">
+<h1>Aside</h1>
+<div id="contact" class="section level2">
+<h2>Contact Info</h2>
+<ul>
+<li><i class="fa fa-envelope"></i> <a href="mailto:thetrianglegirl@gmail.com" class="email">thetrianglegirl@gmail.com</a></li>
+<li><i class="fa fa-github"></i> <a href="https://github.com/trianglegirl">github.com/trianglegirl</a></li>
+</ul>
+</div>
+<div id="skills" class="section level2">
+<h2>Key points</h2>
+<ul>
+<li><p>PhD in Statistics and Operational Research.</p></li>
+<li><p>Broad Data Science Experience</p></li>
+<li><p>Ambassador for the Royal Statistical Society</p></li>
+<li><p>Expertise in R</p></li>
+</ul>
+</div>
+</div>
+<div id="main" class="section level1">
+<h1>Main</h1>
+<div id="title" class="section level2">
+<h2>Rhian Davies</h2>
+</div>
+<div id="education" class="section level2" data-icon="graduation-cap" data-concise="true">
+<h2>Education</h2>
+<div id="unversity-of-lancaster" class="section level3">
+<h3>Unversity of Lancaster</h3>
+<p>Ph.D. in Statistics and Operational Research</p>
+<p>Lancaster, UK</p>
+<p>2019</p>
+<p>Thesis: Efficient Analysis of Data Streams</p>
+</div>
+<div id="unversity-of-lancaster-1" class="section level3">
+<h3>Unversity of Lancaster</h3>
+<p>M.Res in Statistics and Operational Research</p>
+<p>Lancaster, UK</p>
+<p>2012</p>
+</div>
+</div>
+<div id="professional-experience" class="section level2" data-icon="suitcase">
+<h2>Professional Experience</h2>
+<div id="data-scientist" class="section level3">
+<h3>Data Scientist</h3>
+<p>Jumping Rivers</p>
+<p>Lancaster, U.K</p>
+<p>2019</p>
+<ul>
+<li>Taught broad range of R and Python courses.</li>
+<li>Created bespoke shiny dashboard fir clients.</li>
+<li>Developed full stack workflow for automated reporting.</li>
+</ul>
+</div>
+<div id="statistical-consultant" class="section level3">
+<h3>Statistical Consultant</h3>
+<p>Digital Rail Ltd</p>
+<p>Lancaster, U.K</p>
+<p>2018 - 2019</p>
+<ul>
+<li>Developed analytical techniques and visualisation apps for the railway industry.</li>
+<li>Provided statistical consultancy for a broad range of clients.</li>
+<li>Supervised of multiple student projects.</li>
+</ul>
+</div>
+<div id="data-scientist-1" class="section level3">
+<h3>Data Scientist</h3>
+<p>Arctic Shores</p>
+<p>Manchester, U.K</p>
+<p>2017 - 2018</p>
+<ul>
+<li>Developed psychometric models for game-based assessment.</li>
+<li>Data processing and analysis alongside model validation.</li>
+<li>Supported psychologists transition from SPSS to R.</li>
+</ul>
+</div>
+</div>
+<div id="extracurricular-activity" class="section level2" data-icon="chalkboard-teacher">
+<h2>Extracurricular Activity</h2>
+<div id="r-ladies-lancaster" class="section level3">
+<h3>R-Ladies Lancaster</h3>
+<p>Co-ograniser of the R-Ladies Lancaster chapter</p>
+<p>Lancaster, U.K</p>
+<p>2019</p>
+</div>
+<div id="rss-statistical-ambassador" class="section level3">
+<h3>RSS Statistical Ambassador</h3>
+<p>Voluntary role exaplining statistical concepts to journalists and members of the public.</p>
+<p>London, U.K</p>
+<p>2016 - 2019</p>
+</div>
+</div>
+</div>
+
+<script>
+(function() {
+  var i, s, j, el, els;
+  var create_el = function(type, className, content, isHTML) {
+    var el = document.createElement(type);
+    if (className) el.className = className;
+    if (content) {
+      if (isHTML) {el.innerHTML = content;} else {el.innerText = content;}
+    }
+    return el;
+  }
+
+  // replace h2 title with h1
+  var title = document.getElementById('title').querySelector('h2');
+  title.parentNode.replaceChild(create_el('h1', false, title.innerHTML, true), title);
+
+  // add the class .aside to #aside
+  el = document.getElementById('aside');
+  if (el) el.className += ' aside';
+
+  // tweak class names of sections, and add icons
+  els = document.getElementById('main').querySelectorAll('.level2');
+  for (i = 0; i < els.length; i++) {
+    el = els[i];
+    if (i === 0 && el.id === 'title') continue;
+    el.className += ' main-block';
+    if (el.dataset['concise']) el.className += ' concise';
+    s = el.dataset['icon'] || 'bookmark';
+    el.firstElementChild.insertBefore(create_el('i', 'fa fa-' + s), el.firstElementChild.firstChild);
+  }
+
+  // tweak class names of blocks in sections
+  els = document.getElementById('main').querySelectorAll('.level3');
+  for (i = 0; i < els.length; i++) {
+    el = els[i];
+    if (el.parentNode.id === 'title') continue;
+    el.className += ' blocks';
+    el.innerHTML = '<div class="date"></div>' + '<div class="decorator"></div>' +
+      '<div class="details"><header></header><div></div></div>' + el.innerHTML;
+    var ps = el.querySelectorAll('p');
+    // move the date paragraph to the date div
+    if (ps.length >= 3) {
+      s = ps[2].innerText;
+      s = s === 'N/A' ? [] : s.split(' - ');
+      el.removeChild(ps[2]);
+      for (j = 0; j < s.length && j < 2; j++) {
+        el.children[0].appendChild(create_el('span', false, s[j]))
+      }
+    }
+    // move title, description, location to the details div
+    (function(h) {
+      h.appendChild(el.children[3]);
+      var p = el.children[3];  // description
+      if (p.innerText !== 'N/A') {
+        h.appendChild(create_el('span', 'place', p.innerHTML, true));
+      }
+      el.removeChild(p);
+      p = el.children[3];  // location
+      if (p.innerText !== 'N/A') {
+        s = create_el('span', 'location', p.innerHTML, true);
+        s.innerHTML = '<i class="fa fa-map-marker-alt"></i> ' + s.innerHTML;
+        h.appendChild(s);
+      }
+      el.removeChild(p);
+    })(el.children[2].firstElementChild);
+    // move the rest of content in a block into the last div of the details div
+    s = el.children[2];
+    while (j = s.nextSibling) {
+      if (j.className === 'aside') { s = j; continue; }
+      el.children[2].lastElementChild.append(j);
+    }
+  }
+})();
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,308 @@
+---
+title: "A day in the life with R"
+subtitle: ""
+author: "Rhian Davies ([\\@trianglegirl](https://twitter.com/trianglegirl))"
+date: "2019-05-01"
+output:
+  xaringan::moon_reader:
+    css: ["default", "rladies", "rladies-fonts", "rladies-lancaster.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    includes:
+      in_header: header.html
+---
+layout: true
+
+<div class = "rladies-header">
+<span class="social"><table><tr><td><img src="images/twitter.gif"/></td><td> @trianglegirl</td></tr></table></span>
+</div>
+
+
+```{r setup, echo  = FALSE}
+library("emo")
+library("icon")
+```
+
+---
+# About me
+
+.pull-left[
+
+![](images/mug.JPG)
+
+]
+
+.pull-right[
+
+![](images/jr.png)
+
+]
+
+---
+background-image: url("https://media.giphy.com/media/eSakWipdNIaas/giphy.gif")
+background-position: 50% 50%
+class: center, inverse
+---
+class: middle
+```{r coffeetime, eval = FALSE}
+library("beepr")
+Sys.sleep(180)
+beep()
+```
+---
+background-image: url("https://media.giphy.com/media/pMDNVVNOKp3Ta/giphy.gif")
+background-position: 50% 50%
+class: center, inverse
+---
+class: middle
+```{r coffeetime rap, eval = FALSE}
+library("BRRR")
+Sys.sleep(180)
+skrrrahh(18)
+```
+---
+background-image: url("images/compiling.png")
+background-position: 50% 50%
+background-size: 70%
+class: center, inverse
+---
+class: middle
+
+```{r comics, eval = FALSE}
+library("RXKCD")
+getXKCD(which = "current")
+```
+---
+# Twitter
+```{r authenticate, echo = FALSE, message = FALSE, warning = FALSE, results = "hide"}
+library("rtweet")
+library("tidyverse")
+library("knitr")
+create_token(
+  app = "rhian",
+  consumer_key = Sys.getenv("twitterKey"),
+  consumer_secret = Sys.getenv("twitterKeySecret"),
+  access_token = Sys.getenv("twitterToken"),
+  access_secret = Sys.getenv("twitterTokenSecret"))
+```
+
+```{r rladies tweets, messages = FALSE, warnings = FALSE}
+library("tidytext")
+library("rtweet")
+library("stringr")
+tweets <- as_tibble(search_tweets(q = "#GameOfThrones"))
+```
+
+.center[![Boom](https://media.giphy.com/media/LrN9NbJNp9SWQ/giphy.gif)]
+
+---
+```{r list top 10, eval = TRUE}
+  tweets %>%
+  filter(lang == "en") %>%
+  select(text) %>%
+  unnest_tokens(word, text, token = "tweets") %>%
+  filter(!word %in% stop_words$word,
+         !word %in% str_remove_all(stop_words$word, "'"),
+         str_detect(word, "[a-z]")) %>%
+  filter(!str_detect(word, "http")) %>%
+  count(word, sort = TRUE) %>%
+  head(10) %>%
+  kable(format='html')
+```
+---
+
+background-image: url("https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif")
+background-position: 50% 50%
+background-size: 50%
+class: center, inverse
+---
+# Git in RStudio
+
+* Using packages
+* Jumping Rivers have our our internal packages
+
+---
+# Python  `r emo::ji("snake")`
+--
+```{r python, echo = TRUE,message=TRUE}
+library("reticulate")
+source_python("python-script.py")
+python_hello()
+```
+---
+# Strava  `r emo::ji("runner")`
+```{r setup strava, echo = FALSE, message=FALSE, warning=FALSE, results = "hide"}
+# Strava
+library("lubridate")
+act_data = read_csv("strava-data.csv")
+```
+
+```{r get data, eval = FALSE}
+library("rStrava")
+strava_token <- httr::config(token = strava_oauth(app_name, app_client_id, app_secret))
+my_acts <- get_activity_list(strava_token)
+act_data <- compile_activities(my_acts) 
+```
+
+```{r strava data }
+total_dist =
+act_data %>%
+  filter(start_date_local > ymd("2019-01-01")) %>%
+  mutate(week = week(start_date_local)) %>%
+  filter(type == "Run" | type == "Ride") %>%
+  group_by(week, type) %>%
+  summarise(total_dist = sum(distance))
+```
+
+---
+# Strava  `r emo::ji("runner")`
+
+```{r strava plot, fig.width = 8, fig.height = 4}
+total_dist  %>%
+ ggplot(aes(x = week, y = total_dist, fill = type)) + 
+  geom_col() +
+  xlab ("Week of 2019") + 
+  ylab ("Distance (km)") +
+  facet_grid(cols = vars(type))
+```
+
+---
+# Leaflet
+
+```{r map runs, echo = FALSE, message = FALSE, warning = FALSE}
+library("googlePolylines")
+library("leaflet")
+library("sp")
+library("data.table")
+
+poly = googlePolylines::decode(act_data$map.summary_polyline)
+dt = rbindlist(poly, idcol = "id")  
+dt = dt[!which(is.na(dt$lat)),]
+dt = dt[!which(is.na(dt$lon)),]
+lst_lines <- lapply(unique(dt$id), function(x){
+    Lines(Line(dt[id == x, .(lon, lat)]), ID = x)
+  })
+  
+  ## spatial lines object
+  spl_lst <- SpatialLines(lst_lines)
+  
+  ## can now plot the spatial lines
+  leaflet(spl_lst) %>%
+    addProviderTiles("CartoDB.PositronNoLabels") %>%
+    addPolylines(opacity = 0.4, weight = 3, color = "#562457") %>%
+    setView( -2.786961, 54.010532, zoom = 12)
+```
+---
+# Writing slides
+
+![](images/writing-slides.png)
+---
+# Writing slides
+
+```{md}
+library("xaringan")
+
+---
+title: "A day in the life with R"
+subtitle: ""
+author: "Rhian Davies ([\\@trianglegirl](https://twitter.com/trianglegirl))"
+---
+
+# About me
+  
+![](images/selfie.png)
+
+* I love R
+* I play the triangle
+* I love pasta
+```
+---
+# Write a blog post
+
+```{markdown blogpost, eval = FALSE}
+library("blogdown")
+blogdown::new_post(title = "Making a blog post in R")
+
+---
+title: Making a website in R
+author: ''
+date: '2019-05-01'
+slug: making-a-website-in-r
+categories: []
+tags: []
+---
+# You'll never believe this one cool trick about R
+
+Witty, intersting content.
+
+![images/funnypicture.png]()
+```
+
+## [trianglegirl.rbind.io/](http://trianglegirl.rbind.io/post/tidy-tuesday/)
+---
+# C.V
+
+```{r cv}
+library("pagedown")
+```
+
+[C.V written in R](my-cv.html)
+
+---
+background-image: url("https://media.giphy.com/media/eSQKNSmg07dHq/giphy.gif")
+background-position: 50% 50%
+background-size: 100%
+class: center, inverse
+
+---
+# Bookdown `r emo::ji("book")`
+
+```{r pasta, eval =FALSE}
+# Pasta
+
+## Lentil Ragu
+
+* 1 onion, finely chopped
+* 2 carrots, finely chopped
+* celery finely chopped
+* 2 garlic cloves, crushed
+* 250g bag dried red lentils
+* 400g cans chopped tomatoes
+* 1 tbsp tomato purée
+* 1 tsp each dried oregano and thyme
+* 1 bay leaf
+* 500ml vegetable stock
+* 250g spaghetti
+
+Heat the oil in a large saucepan and add the onions, carrots, celery and garlic. Cook gently for 15-20 mins until everything is softened.
+Stir in the lentils, chopped tomatoes, tomato purée, herbs and stock. Bring to a simmer, then cook for 40-50 mins until the lentils are tender and saucy – splash in water if you need. Season.
+Serve with spaghetti or linguine and cheese.
+```
+
+
+---
+background-image: url("images/recipes.png")
+background-position: 50% 50%
+background-size: 80%
+class: center
+
+# https://trianglegirl.github.io/recipes/
+---
+# netflixR
+
+background-image: url("images/netflixR.png")
+background-position: 50% 50%
+background-size: 100%
+class: center
+---
+class: center, middle, inverse
+
+![](images/xaringan.png)
+
+<a href="https://trianglegirl.rbind.io"><i class="fa fa-link fa-fw"></i>&nbsp; trianglegirl.rbind.io</a><br>
+<a href="http://twitter.com/trianglegirl"><i class="fa fa-twitter fa-fw"></i>&nbsp; @trianglegirl</a><br>
+<a href="http://github.com/trianglegirl"><i class="fa fa-github fa-fw"></i>&nbsp; @trianglegirl</a><br>
+

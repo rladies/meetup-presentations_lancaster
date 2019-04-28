@@ -1,0 +1,123 @@
+---
+title: "Rhian Davies's resume"
+author: Rhian Davies
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: false
+---
+
+Aside
+================================================================================
+
+
+
+
+Contact Info {#contact}
+--------------------------------------------------------------------------------
+
+- <i class="fa fa-envelope"></i> thetrianglegirl@gmail.com
+- <i class="fa fa-github"></i> [github.com/trianglegirl](https://github.com/trianglegirl)
+
+
+Key points {#skills}
+--------------------------------------------------------------------------------
+
+- PhD in Statistics and Operational Research.
+
+- Broad Data Science Experience
+
+- Ambassador for the Royal Statistical Society
+
+- Expertise in R
+
+
+Main
+================================================================================
+
+Rhian Davies {#title}
+--------------------------------------------------------------------------------
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+### Unversity of Lancaster
+
+Ph.D. in Statistics and Operational Research
+
+Lancaster, UK
+
+2019
+
+Thesis: Efficient Analysis of Data Streams
+
+### Unversity of Lancaster
+
+M.Res in Statistics and Operational Research
+
+Lancaster, UK
+
+2012
+
+Professional Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+### Data Scientist
+
+Jumping Rivers
+
+Lancaster, U.K
+
+2019
+
+- Taught broad range of R and Python courses.
+- Created bespoke shiny dashboard fir clients.
+- Developed full stack workflow for automated reporting.
+
+### Statistical Consultant
+
+Digital Rail Ltd
+
+Lancaster, U.K
+
+2018 - 2019
+
+- Developed analytical techniques and visualisation apps for the railway industry.
+- Provided statistical consultancy for a broad range of clients.
+- Supervised of multiple student projects.
+
+### Data Scientist
+
+Arctic Shores
+
+Manchester, U.K 
+
+2017 - 2018
+
+- Developed psychometric models for game-based assessment.
+- Data processing and analysis alongside model validation.
+- Supported psychologists transition from SPSS to R.
+
+ 
+Extracurricular Activity {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+### R-Ladies Lancaster
+
+Co-ograniser of the R-Ladies Lancaster chapter
+
+Lancaster, U.K
+
+2019
+
+### RSS Statistical Ambassador
+
+Voluntary role exaplining statistical concepts to journalists and members of the public.
+
+London, U.K
+
+2016 - 2019
+
+
+

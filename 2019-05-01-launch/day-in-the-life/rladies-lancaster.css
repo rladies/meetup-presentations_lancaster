@@ -1,0 +1,78 @@
+/* .title-slide {
+  background-image: url(images/title-page.png);
+  background-size: contain;
+}*/
+
+
+
+/*.remark-code {
+  font-size: 200px;
+}*/
+
+.remark-code, .remark-inline-code { font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
+                                    font-size: 20px;
+                                  }
+
+/* headers and footers */
+.logo {
+  float: left;
+  padding: 5px 20px 5px 20px;
+  height: 30px;
+}
+
+.social {
+  font-size: 15px;
+  float: right;
+  color: #fff;
+  padding: 0px 20px 5px 20px;
+}
+
+.social img {
+  height: 20px;
+}
+
+.social table {
+  border-bottom: none;
+}
+
+/* Header/Footer stuff standard */
+div.rladies-header {
+  background-color: #562457;
+  color: #fff;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 40px;
+  width: 100%;
+  text-align: left;
+}
+
+/* Remove border from twitter icon */
+div.rladies-header table {
+  border-top: 0 solid;
+  border-bottom: 0 solid;
+}
+
+/* Header/Footer stuff inverse */
+div.rladies-header-inverse{
+  background-color: #272822;
+  color: #fff;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 40px;
+  width: 100%;
+  text-align: left;
+}
+
+div.rladies-header-inverse  table {
+  border-top: 0 solid;
+  border-bottom: 0 solid;
+}
+
+/*Slide color */
+.remark-slide-number {
+  color: #FFF;
+}
+
+.remark-slide-number {display:none;}
