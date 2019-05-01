@@ -25,7 +25,7 @@ library("emo")
 
 # What is R-Ladies?
 
-* GLobal organisation with many local chapters.
+* Global organisation with many local chapters.
 * Promoting gender diversity in the R community.
 * Encouraging, inspiring, and empowering people of minority genders.
 * Building a collaborative global network of R leaders, mentors, learners, and developers .

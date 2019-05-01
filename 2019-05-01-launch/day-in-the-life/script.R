@@ -2,6 +2,8 @@
 
 # Coffee
 library("beepr")
+Sys.sleep(3)
+beep(1)
 beep("mario")
 
 library("BRRR")
@@ -9,7 +11,17 @@ skrrrahh(18)
 
 library("RXKCD")
 getXKCD()
+getXKCD(435)
 
+
+
+
+
+
+
+
+
+# Twitter
 library("rtweet")
 create_token(
   app = "rhian",
@@ -20,19 +32,18 @@ create_token(
 
 post_tweet("I'm sending this tweet, from R, live during the first ever @RLadiesLancs meetup. I really hope it actually works... #rstats #rladies", media = "images/fingers-crossed.gif")
 
+
+
+
+
+
+
+
+
+
+
+
+# Rcade
 library("Rcade")
 Rcade::games$Pacman
 
-#Strava
-library("rStrava")
-library("tidyverse")
-library("lubridate")
-app_name <- 'Statistical Sports Analysis' 
-app_client_id  <- Sys.getenv("stravaID")
-app_secret <- Sys.getenv("stravaSecret")
-
-# create the authentication token
-strava_token <- httr::config(token = strava_oauth(app_name, app_client_id, app_secret))
-my_acts <- get_activity_list(strava_token)
-act_data <- compile_activities(my_acts) 
-write_csv(x = act_data, path = "strava-data.csv")

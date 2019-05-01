@@ -90,39 +90,26 @@ create_token(
 ```
 
 ```{r rladies tweets, messages = FALSE, warnings = FALSE}
-library("tidytext")
 library("rtweet")
-library("stringr")
 tweets <- as_tibble(search_tweets(q = "#GameOfThrones"))
 ```
 
 .center[![Boom](https://media.giphy.com/media/LrN9NbJNp9SWQ/giphy.gif)]
-
 ---
-```{r list top 10, eval = TRUE}
-  tweets %>%
-  filter(lang == "en") %>%
-  select(text) %>%
-  unnest_tokens(word, text, token = "tweets") %>%
-  filter(!word %in% stop_words$word,
-         !word %in% str_remove_all(stop_words$word, "'"),
-         str_detect(word, "[a-z]")) %>%
-  filter(!str_detect(word, "http")) %>%
-  count(word, sort = TRUE) %>%
-  head(10) %>%
-  kable(format='html')
-```
----
-
 background-image: url("https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif")
 background-position: 50% 50%
 background-size: 50%
 class: center, inverse
 ---
-# Git in RStudio
+# Actually doing some work now...
 
-* Using packages
-* Jumping Rivers have our our internal packages
+## Reports `r emo::ji("memo")`
+
+## Packages `r emo::ji("package")`
+
+## Shiny apps `r emo::ji("sparkles")`
+
+## Handouts `r emo::ji("notebook")`
 
 ---
 # Python  `r emo::ji("snake")`
@@ -132,7 +119,31 @@ library("reticulate")
 source_python("python-script.py")
 python_hello()
 ```
+
+--
+# SPSS `r emo::ji("chart_decreasing")`
+
+```{r haven, echo = TRUE,message=TRUE, eval = FALSE }
+library("haven")
+read_sav("nasty-spss-data-file-ugh.sav")
+```
+--
+# PASTA `r emo::ji("spaghetti")`
+```{r datapasta, echo = TRUE,message=TRUE, eval = FALSE }
+library("datapasta")
+```
 ---
+background-image: url("images/tribble_paste.gif")
+background-position: 50% 50%
+background-size: 100%
+class: center, inverse
+---
+background-image: url("https://media.giphy.com/media/4dSecMvy8Sdz2/giphy.gif")
+background-position: 50% 50%
+background-size: 100%
+class: center, inverse
+---
+
 # Strava  `r emo::ji("runner")`
 ```{r setup strava, echo = FALSE, message=FALSE, warning=FALSE, results = "hide"}
 # Strava
@@ -156,8 +167,8 @@ act_data %>%
   group_by(week, type) %>%
   summarise(total_dist = sum(distance))
 ```
-
 ---
+
 # Strava  `r emo::ji("runner")`
 
 ```{r strava plot, fig.width = 8, fig.height = 4}
@@ -236,20 +247,21 @@ tags: []
 ---
 # You'll never believe this one cool trick about R
 
-Witty, intersting content.
+Witty, interesting content.
 
 ![images/funnypicture.png]()
 ```
 
 ## [trianglegirl.rbind.io/](http://trianglegirl.rbind.io/post/tidy-tuesday/)
+
 ---
-# C.V
+# Write a C.V
 
 ```{r cv}
 library("pagedown")
 ```
 
-[C.V written in R](my-cv.html)
+![C.V written in R](images/cv.png)
 
 ---
 background-image: url("https://media.giphy.com/media/eSQKNSmg07dHq/giphy.gif")
@@ -260,7 +272,7 @@ class: center, inverse
 ---
 # Bookdown `r emo::ji("book")`
 
-```{r pasta, eval =FALSE}
+```{c pasta, eval =FALSE}
 # Pasta
 
 ## Lentil Ragu
@@ -290,17 +302,18 @@ background-size: 80%
 class: center
 
 # https://trianglegirl.github.io/recipes/
----
-# netflixR
 
+---
 background-image: url("images/netflixR.png")
 background-position: 50% 50%
-background-size: 100%
-class: center
+background-size: 90%
+
+class: center, inverse
+# NetflixR
 ---
 class: center, middle, inverse
 
-![](images/xaringan.png)
+![](images/my-packages.png)
 
 <a href="https://trianglegirl.rbind.io"><i class="fa fa-link fa-fw"></i>&nbsp; trianglegirl.rbind.io</a><br>
 <a href="http://twitter.com/trianglegirl"><i class="fa fa-twitter fa-fw"></i>&nbsp; @trianglegirl</a><br>
