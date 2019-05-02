@@ -21,6 +21,10 @@ getXKCD(435)
 
 
 
+
+
+
+
 # Twitter
 library("rtweet")
 create_token(
