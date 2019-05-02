@@ -1,6 +1,6 @@
 # meetup-presentations_lancaster
 
-## 2019-05-01: Lauch event
+## 2019-05-01: Launch event
 
 * [Introduction to R-Ladies and the local groups.](https://rladies.github.io/meetup-presentations_lancaster/2019-05-01-launch/introducing-rladies-lancaster/introducing-rladies-lancaster.html#1)
 * Nic Crane: Ten Steps to Becoming a Tidyverse Contributor.
