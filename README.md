@@ -2,8 +2,9 @@
 
 ## 2019-06-05 Data Transformation
 
-* [Slides]()
+* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-06-05-data-transformation/data-transformation.html)
 * [R for Data Science book](https://r4ds.had.co.nz/)
+* [Solutions to excercises](https://jrnold.github.io/r4ds-exercise-solutions/transform.html)
 
 ## 2019-05-01: Launch event
 
