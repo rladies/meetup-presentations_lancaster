@@ -3,6 +3,7 @@
 ## 2019-06-05 Data Transformation
 
 * [Slides]()
+* [R for Data Science book](https://r4ds.had.co.nz/)
 
 ## 2019-05-01: Launch event
 
