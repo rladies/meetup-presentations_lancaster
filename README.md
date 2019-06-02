@@ -1,5 +1,9 @@
 # meetup-presentations_lancaster
 
+## 2019-06-05 Data Transformation
+
+* [Slides]()
+
 ## 2019-05-01: Launch event
 
 * [Introduction to R-Ladies and the local groups.](https://rladies.github.io/meetup-presentations_lancaster/2019-05-01-launch/introducing-rladies-lancaster/introducing-rladies-lancaster.html#1)
@@ -8,7 +12,3 @@
 * [Lucy Morgan: The rocky road to building my first R package.](https://rladies.github.io/meetup-presentations_lancaster/2019-05-01-launch/rocky-road-to-building-my-first-package/The-rocky-road-to-building-my-first-R.pdf)
 
 
-## 2019-06-05 Data Transformation
-
-* [Slides]()
-* [R4DS book](https://r4ds.had.co.nz/)
