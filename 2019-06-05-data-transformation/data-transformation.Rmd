@@ -67,7 +67,6 @@ knitr::include_graphics("images/hex-dplyr.png")
 
 ```{r load data}
 library("nycflights13")
-library("tidyverse")
 ```
 
 Typing `flights` will print out the data in our console.
@@ -326,9 +325,9 @@ mutate(flights_sml,
 ---
 # Useful functions with `mutate()`
 
-* Arimethemic:  operators `+`, `-`, `*`, `/`, `^`. These are all vectorised, using the so called “recycling rules”.  E.g  `air_time / 60`
+* Arithmetic  operators `+`, `-`, `*`, `/`, `^`. These are all vectorised, using the so called “recycling rules”.  E.g  `air_time / 60`
 
-* Modular arithmetic: `%/%` (integer division) and `%%` (remainder) Modular arithmetic is a handy tool because it allows you to break integers up into pieces. For example, in the flights dataset, you can compute hour and minute from dep_time with:
+* Modular arithmetic: `%/%` (integer division) and `%%` (remainder) Modular arithmetic is a handy tool because it allows you to break integers up into pieces. For example, in the flights dataset, you can compute hour and minute from `dep_time` with:
 
 ```{r, modular}
 transmute(flights,
@@ -337,19 +336,6 @@ transmute(flights,
   minute = dep_time %% 100
 )
 ```
-
----
-# Useful functions with `mutate()`
-
-* Logs: `log()`, `log2()`, `log10()`.
-
-* Offsets: `lead()` and `lag()` allow you to refer to leading or lagging values. This allows you to compute running differences (e.g. `x - lag(x)`). 
-
-* Cumulative and rolling aggregates: R provides functions for running sums, products, mins and maxes: `cumsum()`, `cumprod()`, `cummin()`, `cummax()`; and dplyr provides `cummean()` for cumulative means.
-
-* Logical comparisons, `<`, `<=`, `>`, `>=`, `!=`, and `==`.
-
-* Ranking: `min_rank()` and it's variants. See `?min_rank` 
 
 ---
 
@@ -363,9 +349,7 @@ transmute(flights,
 
 4. Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
 
-5. Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for `min_rank()`.
-
-6. What does `1:3 + 1:10` return? Why?
+5. What does `1:3 + 1:10` return? Why?
 
 ---
 
@@ -470,30 +454,49 @@ not_cancelled
 ```
 ---
 
-# Useful summary functions
+# Counts
+To count we can use `n()`.
 
-* Counts: `n()`, `n_distinct()`
-* Location: `mean()`, `median()`
-* Spread:  `sd(x)`, `IQR(x)`
-* Rank: `min(x)`, `quantile(x, 0.25)`, `max(x)`
-
-Note: Counts are so useful that dplyr provides a simple helper if all you want is a count.
-
-E.g. 
-```{r count}
-count(flights, dest)
+```{r count, eval = FALSE}
+flights %>% 
+  group_by(dest) %>% 
+  summarise(total = n())
 ```
+
+Note: Counts are so useful that dplyr provides a simple shortcut for counting.
+
+```{r count helper, eval = FALSE}
+flights %>%
+  count(dest)
+```
+
+You can also provide a weight variable. For example, you could use this to “count” (sum) the total number of miles a plane flew.
+
+```{r count wt, eval = FALSE}
+not_cancelled %>% 
+  count(tailnum, wt = distance)
+```
+
+---
+# Averages
+
+* `mean()`, `median()`
+
+What is the average flight delay on each day?
+
+```{r average delay per day}
+not_cancelled %>% 
+  group_by(year, month, day) %>% 
+  summarise(avg_delay = mean(arr_delay))
+```
+
 ---
 
-# Useful summary functions
+# Spread
 
-## Averages
-* `mean()`
-* `median()`
+* `sd()`, `IQR()`, `mad()`
 
-# Useful summary functions
-
-## Spread
+Why is distance to some destinations more variable than to others?
 
 ```{r spread}
 not_cancelled %>% 
@@ -503,81 +506,31 @@ not_cancelled %>%
 ```
 ---
 
-#Grouping by multiple variables
+## Measures of Rank
 
-When you group by multiple variables, each summary peels off one level of the grouping. That makes it easy toprogressively roll up a dataset:
+* `min(x)`, `max(x)`, `quantile(x, 0.25)`
 
-```{r group by multiple}
-daily <- group_by(flights, year, month, day)
-per_day   <- summarise(daily, flights = n())
-head(per_day)
+When do the first and last flights leave each day?
+
+```{r min max}
+not_cancelled %>% 
+  group_by(year, month, day) %>% 
+  summarise(
+    first = min(dep_time),
+    last = max(dep_time)
+  )
 ```
 
 ---
 
 # `summarise()` excercises
 
-1. Brainstorm at least 5 different ways to assess the typical delay characteristics of a group of flights. Consider the following scenarios:
-  * A flight is 15 minutes early 50% of the time, and 15 minutes late 50% of the time.
-  * A flight is always 10 minutes late.
-  * A flight is 30 minutes early 50% of the time, and 30 minutes late 50% of the time.
-  * 99% of the time a flight is on time. 1% of the time it’s 2 hours late.
-  * Which is more important: arrival delay or departure delay?
+1. Calculate the total number of flights which occured for each month.
 
-2. Come up with another approach that will give you the same output as `not_cancelled %>% count(dest)` and `not_cancelled %>% count(tailnum, wt = distance)` (without using `count()`).
+2. In which month was the variability of arrival delay the highest? <!-- July-->
 
-3. Our definition of cancelled flights (`is.na(dep_delay) | is.na(arr_delay)` ) is slightly suboptimal. Why? Which is the most important column?
+3. Which carrier has the worst delays? 
 
-4. Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
+4. Come up with another approach that will give you the same output as `not_cancelled %>% count(dest)` and `not_cancelled %>% count(tailnum, wt = distance)` without using `count()`. (Hint - think about `group_by()`).
 
-5. Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about `flights %>% group_by(carrier, dest) %>% summarise(n())`)
-
-6. What does the sort argument to count() do. When might you use it?
-
----
-
-# Grouped mutates and filters
-Grouping is most useful in conjunction with `summarise()`, but you can also do convenient operations with `mutate()` and `filter()`:
-
-Find the worst members of each group:
-```{r worst members}
-flights %>% 
-  group_by(year, month, day) %>%
-  filter(rank(desc(arr_delay)) < 10)
-```
-
----
-# Grouped mutates and filters
-Find all groups bigger than a threshold:
-```{r popular}
-popular_dests <- flights %>% 
-  group_by(dest) %>% 
-  filter(n() > 365)
-```
-
-Standardise to compute per group metrics:
-
-```{r standardise}
-popular_dests %>% 
-  filter(arr_delay > 0) %>% 
-  mutate(prop_delay = arr_delay / sum(arr_delay)) %>% 
-  select(year:day, dest, arr_delay, prop_delay)
-```
-
----
- 
-# Excercises
-
-1. Which plane (tailnum) has the worst on-time record?
-
-2. What time of day should you fly if you want to avoid delays as much as possible?
-
-3. For each destination, compute the total minutes of delay. For each flight, compute the proportion of the total delay for its destination.
-
-4. Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using lag(), explore how the delay of a flight is related to the delay of the immediately preceding flight.
-
-5. Look at each destination. Can you find flights that are suspiciously fast? (i.e. flights that represent a potential data entry error). Compute the air time a flight relative to the shortest flight to that destination. Which flights were most delayed in the air?
-
-6. Find all destinations that are flown by at least two carriers. Use that information to rank the carriers.
-
-7. For each plane, count the number of flights before the first delay of greater than 1 hour.
+5. What does the sort argument to `count()` do? When might you use it?

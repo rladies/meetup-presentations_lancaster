@@ -72,7 +72,6 @@ library("tidyverse")
 
 ```r
 library("nycflights13")
-library("tidyverse")
 ```
 
 Typing `flights` will print out the data in our console.
@@ -543,9 +542,9 @@ mutate(flights_sml,
 ---
 # Useful functions with `mutate()`
 
-* Arimethemic:  operators `+`, `-`, `*`, `/`, `^`. These are all vectorised, using the so called “recycling rules”.  E.g  `air_time / 60`
+* Arithmetic  operators `+`, `-`, `*`, `/`, `^`. These are all vectorised, using the so called “recycling rules”.  E.g  `air_time / 60`
 
-* Modular arithmetic: `%/%` (integer division) and `%%` (remainder) Modular arithmetic is a handy tool because it allows you to break integers up into pieces. For example, in the flights dataset, you can compute hour and minute from dep_time with:
+* Modular arithmetic: `%/%` (integer division) and `%%` (remainder) Modular arithmetic is a handy tool because it allows you to break integers up into pieces. For example, in the flights dataset, you can compute hour and minute from `dep_time` with:
 
 
 ```r
@@ -574,19 +573,6 @@ transmute(flights,
 ```
 
 ---
-# Useful functions with `mutate()`
-
-* Logs: `log()`, `log2()`, `log10()`.
-
-* Offsets: `lead()` and `lag()` allow you to refer to leading or lagging values. This allows you to compute running differences (e.g. `x - lag(x)`). 
-
-* Cumulative and rolling aggregates: R provides functions for running sums, products, mins and maxes: `cumsum()`, `cumprod()`, `cummin()`, `cummax()`; and dplyr provides `cummean()` for cumulative means.
-
-* Logical comparisons, `&lt;`, `&lt;=`, `&gt;`, `&gt;=`, `!=`, and `==`.
-
-* Ranking: `min_rank()` and it's variants. See `?min_rank` 
-
----
 
 # `mutate()` excercises
 
@@ -598,9 +584,7 @@ transmute(flights,
 
 4. Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
 
-5. Find the 10 most delayed flights using a ranking function. How do you want to handle ties? Carefully read the documentation for `min_rank()`.
-
-6. What does `1:3 + 1:10` return? Why?
+5. What does `1:3 + 1:10` return? Why?
 
 ---
 
@@ -793,48 +777,71 @@ not_cancelled
 ```
 ---
 
-# Useful summary functions
+# Counts
+To count we can use `n()`.
 
-* Counts: `n()`, `n_distinct()`
-* Location: `mean()`, `median()`
-* Spread:  `sd(x)`, `IQR(x)`
-* Rank: `min(x)`, `quantile(x, 0.25)`, `max(x)`
-
-Note: Counts are so useful that dplyr provides a simple helper if all you want is a count.
-
-E.g. 
 
 ```r
-count(flights, dest)
+flights %&gt;% 
+  group_by(dest) %&gt;% 
+  summarise(total = n())
+```
+
+Note: Counts are so useful that dplyr provides a simple shortcut for counting.
+
+
+```r
+flights %&gt;%
+  count(dest)
+```
+
+You can also provide a weight variable. For example, you could use this to “count” (sum) the total number of miles a plane flew.
+
+
+```r
+not_cancelled %&gt;% 
+  count(tailnum, wt = distance)
+```
+
+---
+# Averages
+
+* `mean()`, `median()`
+
+What is the average flight delay on each day?
+
+
+```r
+not_cancelled %&gt;% 
+  group_by(year, month, day) %&gt;% 
+  summarise(avg_delay = mean(arr_delay))
 ```
 
 ```
-## # A tibble: 105 x 2
-##    dest      n
-##    &lt;chr&gt; &lt;int&gt;
-##  1 ABQ     254
-##  2 ACK     265
-##  3 ALB     439
-##  4 ANC       8
-##  5 ATL   17215
-##  6 AUS    2439
-##  7 AVL     275
-##  8 BDL     443
-##  9 BGR     375
-## 10 BHM     297
-## # … with 95 more rows
+## # A tibble: 365 x 4
+## # Groups:   year, month [12]
+##     year month   day avg_delay
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1  2013     1     1    12.7  
+##  2  2013     1     2    12.7  
+##  3  2013     1     3     5.73 
+##  4  2013     1     4    -1.93 
+##  5  2013     1     5    -1.53 
+##  6  2013     1     6     4.24 
+##  7  2013     1     7    -4.95 
+##  8  2013     1     8    -3.23 
+##  9  2013     1     9    -0.264
+## 10  2013     1    10    -5.90 
+## # … with 355 more rows
 ```
+
 ---
 
-# Useful summary functions
+# Spread
 
-## Averages
-* `mean()`
-* `median()`
+* `sd()`, `IQR()`, `mad()`
 
-# Useful summary functions
-
-## Spread
+Why is distance to some destinations more variable than to others?
 
 
 ```r
@@ -862,140 +869,53 @@ not_cancelled %&gt;%
 ```
 ---
 
-#Grouping by multiple variables
+## Measures of Rank
 
-When you group by multiple variables, each summary peels off one level of the grouping. That makes it easy toprogressively roll up a dataset:
+* `min(x)`, `max(x)`, `quantile(x, 0.25)`
+
+When do the first and last flights leave each day?
 
 
 ```r
-daily &lt;- group_by(flights, year, month, day)
-per_day   &lt;- summarise(daily, flights = n())
-head(per_day)
+not_cancelled %&gt;% 
+  group_by(year, month, day) %&gt;% 
+  summarise(
+    first = min(dep_time),
+    last = max(dep_time)
+  )
 ```
 
 ```
-## # A tibble: 6 x 4
-## # Groups:   year, month [1]
-##    year month   day flights
-##   &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;
-## 1  2013     1     1     842
-## 2  2013     1     2     943
-## 3  2013     1     3     914
-## 4  2013     1     4     915
-## 5  2013     1     5     720
-## 6  2013     1     6     832
+## # A tibble: 365 x 5
+## # Groups:   year, month [12]
+##     year month   day first  last
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1  2013     1     1   517  2356
+##  2  2013     1     2    42  2354
+##  3  2013     1     3    32  2349
+##  4  2013     1     4    25  2358
+##  5  2013     1     5    14  2357
+##  6  2013     1     6    16  2355
+##  7  2013     1     7    49  2359
+##  8  2013     1     8   454  2351
+##  9  2013     1     9     2  2252
+## 10  2013     1    10     3  2320
+## # … with 355 more rows
 ```
 
 ---
 
 # `summarise()` excercises
 
-1. Brainstorm at least 5 different ways to assess the typical delay characteristics of a group of flights. Consider the following scenarios:
-  * A flight is 15 minutes early 50% of the time, and 15 minutes late 50% of the time.
-  * A flight is always 10 minutes late.
-  * A flight is 30 minutes early 50% of the time, and 30 minutes late 50% of the time.
-  * 99% of the time a flight is on time. 1% of the time it’s 2 hours late.
-  * Which is more important: arrival delay or departure delay?
+1. Calculate the total number of flights which occured for each month.
 
-2. Come up with another approach that will give you the same output as `not_cancelled %&gt;% count(dest)` and `not_cancelled %&gt;% count(tailnum, wt = distance)` (without using `count()`).
+2. In which month was the variability of arrival delay the highest? &lt;!-- July--&gt;
 
-3. Our definition of cancelled flights (`is.na(dep_delay) | is.na(arr_delay)` ) is slightly suboptimal. Why? Which is the most important column?
+3. Which carrier has the worst delays? 
 
-4. Look at the number of cancelled flights per day. Is there a pattern? Is the proportion of cancelled flights related to the average delay?
+4. Come up with another approach that will give you the same output as `not_cancelled %&gt;% count(dest)` and `not_cancelled %&gt;% count(tailnum, wt = distance)` without using `count()`. (Hint - think about `group_by()`).
 
-5. Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about `flights %&gt;% group_by(carrier, dest) %&gt;% summarise(n())`)
-
-6. What does the sort argument to count() do. When might you use it?
-
----
-
-# Grouped mutates and filters
-Grouping is most useful in conjunction with `summarise()`, but you can also do convenient operations with `mutate()` and `filter()`:
-
-Find the worst members of each group:
-
-```r
-flights %&gt;% 
-  group_by(year, month, day) %&gt;%
-  filter(rank(desc(arr_delay)) &lt; 10)
-```
-
-```
-## # A tibble: 3,306 x 19
-## # Groups:   year, month, day [365]
-##     year month   day dep_time sched_dep_time dep_delay arr_time
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
-##  1  2013     1     1      848           1835       853     1001
-##  2  2013     1     1     1815           1325       290     2120
-##  3  2013     1     1     1842           1422       260     1958
-##  4  2013     1     1     1942           1705       157     2124
-##  5  2013     1     1     2006           1630       216     2230
-##  6  2013     1     1     2115           1700       255     2330
-##  7  2013     1     1     2205           1720       285       46
-##  8  2013     1     1     2312           2000       192       21
-##  9  2013     1     1     2343           1724       379      314
-## 10  2013     1     2     1244            900       224     1431
-## # … with 3,296 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
-## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
-## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
-## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;
-```
-
----
-# Grouped mutates and filters
-Find all groups bigger than a threshold:
-
-```r
-popular_dests &lt;- flights %&gt;% 
-  group_by(dest) %&gt;% 
-  filter(n() &gt; 365)
-```
-
-Standardise to compute per group metrics:
-
-
-```r
-popular_dests %&gt;% 
-  filter(arr_delay &gt; 0) %&gt;% 
-  mutate(prop_delay = arr_delay / sum(arr_delay)) %&gt;% 
-  select(year:day, dest, arr_delay, prop_delay)
-```
-
-```
-## # A tibble: 131,106 x 6
-## # Groups:   dest [77]
-##     year month   day dest  arr_delay prop_delay
-##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-##  1  2013     1     1 IAH          11  0.000111 
-##  2  2013     1     1 IAH          20  0.000201 
-##  3  2013     1     1 MIA          33  0.000235 
-##  4  2013     1     1 ORD          12  0.0000424
-##  5  2013     1     1 FLL          19  0.0000938
-##  6  2013     1     1 ORD           8  0.0000283
-##  7  2013     1     1 LAX           7  0.0000344
-##  8  2013     1     1 DFW          31  0.000282 
-##  9  2013     1     1 ATL          12  0.0000400
-## 10  2013     1     1 DTW          16  0.000116 
-## # … with 131,096 more rows
-```
-
----
- 
-# Excercises
-
-1. Which plane (tailnum) has the worst on-time record?
-
-2. What time of day should you fly if you want to avoid delays as much as possible?
-
-3. For each destination, compute the total minutes of delay. For each flight, compute the proportion of the total delay for its destination.
-
-4. Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using lag(), explore how the delay of a flight is related to the delay of the immediately preceding flight.
-
-5. Look at each destination. Can you find flights that are suspiciously fast? (i.e. flights that represent a potential data entry error). Compute the air time a flight relative to the shortest flight to that destination. Which flights were most delayed in the air?
-
-6. Find all destinations that are flown by at least two carriers. Use that information to rank the carriers.
-
-7. For each plane, count the number of flights before the first delay of greater than 1 hour.
+5. What does the sort argument to `count()` do? When might you use it?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
