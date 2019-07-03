@@ -1,4 +1,7 @@
 # meetup-presentations_lancaster
+## 2019-07-03 Pretty Graphics
+
+*[Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-07-03-pretty-graphics/pretty-graphics.html#1)
 
 ## 2019-06-05 Data Transformation
 
