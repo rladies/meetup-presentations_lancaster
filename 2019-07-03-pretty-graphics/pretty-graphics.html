@@ -136,7 +136,7 @@ Each geom function in ggplot2 takes a mapping argument. The mapping argument is 
 
 ---
 
-# `ggplot()` excercises
+# Excercises
 
 1. Run `ggplot(data = mpg)`. What do you see?
 
@@ -150,7 +150,7 @@ Each geom function in ggplot2 takes a mapping argument. The mapping argument is 
 
 ---
 
-# Aesthetic mappings
+# Aesthetic Mappings
 
 In the plot below, one group of points (highlighted in red) seems to fall outside of the linear trend. These cars have a higher mileage than you might expect. How can you explain these cars?
 
@@ -159,7 +159,7 @@ In the plot below, one group of points (highlighted in red) seems to fall outsid
 Let’s hypothesize that the cars are hybrids. One way to test this hypothesis is to look at the `class` value for each car.
 
 ---
-# Aesthetic mappings
+# Aesthetic Mappings
 
 You can add a third variable, like `class`, to a two dimensional scatterplot by mapping it to an aesthetic:
 
@@ -238,7 +238,7 @@ ggplot(data = mpg) +
 6) What happens if you map an aesthetic to something other than a variable name, like `aes(colour = displ &lt; 5)`? Note, you’ll also need to specify `x` and `y`.
 
 ---
-#Facets
+# Facets
 
 It may be useful to split your plot into *facets*, subplots that each display one subset of the data.
 
@@ -279,7 +279,7 @@ If you prefer to not facet in the rows or columns dimension, use a `.` instead o
 ```r
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) + 
-    facet_grid(drv ~ cyl)
+    facet_grid(. ~ cyl)
 ```
 
 ![](pretty-graphics_files/figure-html/facets3-1.png)&lt;!-- --&gt;
@@ -312,7 +312,7 @@ ggplot(data = mpg) +
 
 ---
 
-# Exercises continuted
+# Exercises Continuted
 
 4) Take the first faceted plot in this section:
 
@@ -331,7 +331,7 @@ What are the advantages to using faceting instead of the colour aesthetic? What 
 
 ---
 
-# Geometric objects
+# Geometric Objects
 
 A *geom* is the geometrical object that a plot uses to represent data. For example, bar charts use bar geoms, line charts use line geoms, boxplots use boxplot geoms. Scatterplots use the point geom. 
 
@@ -522,7 +522,7 @@ ggplot(data = diamonds) +
 
 ---
 
-# Coordinate systems
+# Coordinate Systems
 
 There are a number of coordinate systems that are occasionally helpful.
 
@@ -544,7 +544,7 @@ grid.arrange(p1, p2, ncol = 2)
 
 ---
 
-# Coordinate systems
+# Coordinate Systems
 
 `coord_polar()` uses polar coordinates.
 
