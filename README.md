@@ -1,7 +1,13 @@
 # meetup-presentations_lancaster
+
+## 2019-09-04 Tidy Data
+
+* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-09-04-tidy-data/tidy-data.html)
+* [R for Data Science book](https://r4ds.had.co.nz/) (Chapter 12)
+
 ## 2019-07-03 Pretty Graphics
 
-* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-07-03-pretty-graphics/pretty-graphics.html#1)
+* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-07-03-pretty-graphics/pretty-graphics.html)
 
 ## 2019-06-05 Data Transformation
 
