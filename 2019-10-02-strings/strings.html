@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Data Transformation</title>
+    <title>Stringr</title>
     <meta charset="utf-8" />
     <meta name="author" content="(@RLadiesLancs)" />
     <meta name="date" content="2019-06-05" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rladies.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+    <link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+    <script src="libs/str_view-binding-1.4.0/str_view.js"></script>
     <link rel="stylesheet" href="rladies-lancaster.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Data Transformation
+# Stringr
 ### (<a href="https://twitter.com/RLadiesLancs">@RLadiesLancs</a>)
 ### 2019-06-05
 
@@ -32,27 +35,25 @@ layout: true
 
 # Tonight
 
-* 18:00 - 18:50 - `filter()`, `arrange()` and `select()`
-* 18:50 - 19:15 - Nibbles and networking 🧀
-* 19:15 - 20:00 - `mutate()` and `summarise()`
+* **stringr** package
+* An introduction to regular expressions (Regex)
 
+### Slides 👨‍🏫     [github.com/rladies](https://github.com/rladies/)
 
-### Slides: [github.com/rladies](https://github.com/rladies/)
+### Book chapter 📖     [r4ds.had.co.nz](https://r4ds.had.co.nz/transform.html)
 
-### Book chapter: [r4ds.had.co.nz](https://r4ds.had.co.nz/transform.html)
-
-### Slack: [bit.ly/R4DSslack](https://bit.ly/R4DSslack )
+### Slack 💬     [bit.ly/R4DSslack](https://bit.ly/R4DSslack )
 
 ---
 
-# Jumping Rivers
-
-&lt;img src="images/jr.png" width="250px" style="display: block; margin: auto;" /&gt;
+# Thanks to our sponsors 🥨
+&lt;img src="images/jr.png" width="550px" style="display: block; margin: auto;" /&gt;
 
 ---
-# dplyr and Tidyverse
 
-To access the datasets, help pages, and functions that we will use tonight, load the tidyverse by running this code:
+# stringr
+
+To access the datasets, help pages, and functions that we will use tonight, load the stringr by running this code:
 
 
 ```r
@@ -66,7 +67,436 @@ library("stringr")
 
 &lt;img src="images/stringr.png" width="250px" style="display: block; margin: auto;" /&gt;
 
-Cheatsheet: https://github.com/rstudio/cheatsheets/blob/master/strings.pdf
+---
+
+# **stringr** - stringr manipulation
+
+* Handling text in data sets can be challenging
+* Typical problems include
+  * Extra whitespace
+  * Incorrectly capitalised names
+  * Poor spelling
+
+* **stringr** has lots of tools to deal with strings
+
+* RStudio has provided a [cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf)
+
+---
+
+# Subsetting strings
+
+We first need to load **stringr** and we also need basic string to practice on 
+
+
+```r
+library("tidyverse")
+review = "The food was delicious"
+```
+
+The function `str_sub()` gives us a handy way to extract characters 
+
+
+```r
+str_sub(review, 5, 8)
+```
+
+```
+## [1] "food"
+```
+
+---
+
+# Subsetting strings
+
+* Positive integers count from the left
+* Negative integers count from the right 
+
+
+```r
+str_sub(review, -9, -1)
+```
+
+```
+## [1] "delicious"
+```
+
+We can also use this to modify strings
+
+
+```r
+str_sub(review, -9, -1) = "awful"
+review
+```
+
+```
+## [1] "The food was awful"
+```
+
+---
+
+# Replacing strings
+
+* Use `str_replace()` to match and replace patterns 
+
+
+```r
+str_replace(review, pattern = "food", 
+            replacement = "service")
+```
+
+```
+## [1] "The service was awful"
+```
+
+---
+# Detecting strings
+
+* If we have a vector of strings, we can look for patterns within each string
+
+
+```r
+review = c("The food was delicious", 
+           "The staff were unhelpful", 
+           "The service was ok")
+
+str_detect(review, "delicious")
+```
+
+```
+## [1]  TRUE FALSE FALSE
+```
+
+```r
+str_which(review, "delicious")
+```
+
+```
+## [1] 1
+```
+
+```r
+str_subset(review, "delicious")
+```
+
+```
+## [1] "The food was delicious"
+```
+
+---
+
+# str_extract
+
+* `str_extract()` returns a vector with the pattern
+
+
+```r
+str_extract(review, "unhelpful")
+```
+
+```
+## [1] NA          "unhelpful" NA
+```
+
+
+---
+
+# String length
+
+* We can find the length of a string with `str_length()` 
+
+```r
+str_length(review)
+```
+
+```
+## [1] 22 24 18
+```
+
+* Note that this function counts whitespace
+
+---
+
+# Dealing with whitespace
+
+* Whitespace can be a pain when working with strings.
+
+
+```r
+names = c("John", "Abby", " Thomas", " Zak")
+str_sort(names)
+```
+
+```
+## [1] " Thomas" " Zak"    "Abby"    "John"
+```
+
+* The string has been sorted incorrectly due to the whitespace.
+*  We can use `str_trim()` to remove any leading or trailing whitespace from strings. 
+
+
+```r
+names %&gt;% 
+  str_trim() %&gt;% 
+  str_sort()
+```
+
+```
+## [1] "Abby"   "John"   "Thomas" "Zak"
+```
+---
+
+# Squish!
+
+* We can also trim excessive whitespace within a string, using `str_squish()`. 
+
+```r
+bond = c("    James      Bond     ")
+str_squish(bond)
+```
+
+```
+## [1] "James Bond"
+```
+
+* Notice this also trims leading and trailing whitespace.
+
+---
+
+# Case transformation 
+
+* `str_to_upper()` converts all to upper
+* `str_to_lower()` converts all to lower
+* `str_to_title()` capitalises the first character of each word
+
+
+```r
+str_to_upper(names)
+```
+
+```
+## [1] "JOHN"    "ABBY"    " THOMAS" " ZAK"
+```
+
+```r
+str_to_lower(names)
+```
+
+```
+## [1] "john"    "abby"    " thomas" " zak"
+```
+
+
+```r
+bad_names = c("JONATHON butterwood", "colin BATTERSEY")
+str_to_title(bad_names)
+```
+
+```
+## [1] "Jonathon Butterwood" "Colin Battersey"
+```
+
+---
+
+# Excercises
+
+1. In code that doesn’t use stringr, you’ll often see `paste()` and `paste0()`. What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA? What about `glue()`?
+
+2. In your own words, describe the difference between the sep and collapse arguments to `str_c()`.
+
+3. Use `str_length()` and `str_sub()` to extract the middle character from a string. What will you do if the string has an even number of characters?
+
+4. What does `str_wrap()` do? When might you want to use it?
+
+---
+
+# Regular Expressions
+
+* General language to describe patterns in strings.
+
+*  Practice with `str_view()` 
+
+
+```r
+x &lt;- c("apple", "banana", "pear")
+str_view(x, "an")
+```
+
+<div id="htmlwidget-285bf53539154ac401c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-285bf53539154ac401c2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Any character `.`
+
+The next step up in complexity is `.`, which matches any character (except a newline):
+
+
+```r
+str_view(x, ".a.")
+```
+
+<div id="htmlwidget-506d427e20cbd9604f80" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-506d427e20cbd9604f80">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Escape!
+
+* How do we search for a literal dot `.` ?
+* `\` is the character to escape 
+* In R, we need to type two backslashes in a string.
+* Therefore to search for a dot we need to use `\\.`
+
+For example, to find the phrase `a.c`
+
+
+```r
+str_view(c("abc", "a.c", "bef"), "a\\.c")
+```
+
+<div id="htmlwidget-b9092eed6fdd57920b76" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b9092eed6fdd57920b76">{"x":{"html":"<ul>\n  <li>abc<\/li>\n  <li><span class='match'>a.c<\/span><\/li>\n  <li>bef<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Escape escape!
+
+* How do we search for a backslash `\`?
+* Well we need to escape it.
+* `\\\\`
+
+
+
+```r
+x &lt;- c("apple", "banana", "pear", "plum\\peach")
+str_view(x, "\\\\")
+```
+
+<div id="htmlwidget-717d1bce8600248de8c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-717d1bce8600248de8c2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n  <li>plum<span class='match'>\\<\/span>peach<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Anchors ⚓
+
+* By default, regular expressions will match any part of a string.
+* We can anchor the regular expression to match from the start or end of the string. 
+* `^` to match the start of the string.
+
+
+```r
+x &lt;- c("apple", "banana", "pear")
+str_view(x, "^a")
+```
+
+<div id="htmlwidget-76009cfb51b607f02245" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-76009cfb51b607f02245">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Anchors ⚓
+
+* By default, regular expressions will match any part of a string.
+* We can anchor the regular expression to match from the start or end of the string. 
+* `$` to match the end of the string.
+
+
+```r
+x &lt;- c("apple", "banana", "pear")
+str_view(x, "a$")
+```
+
+<div id="htmlwidget-166a00611d5ec48ef2e0" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-166a00611d5ec48ef2e0">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Anchors ⚓
+
+* Putting it all together
+* Use both `^` and `$`
+
+
+```r
+x &lt;- c("apple", "banana", "pear")
+str_view(x, "^apple$")
+```
+
+<div id="htmlwidget-488a9f67d2f4c410e7c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-488a9f67d2f4c410e7c2">{"x":{"html":"<ul>\n  <li><span class='match'>apple<\/span><\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# Character classes
+
+There are a number of special patterns that match more than one character.You’ve already seen `.`, which matches any character apart from a newline. 
+
+* `\d`: matches any digit.
+* `\s:` matches any whitespace (e.g. space, tab, newline).
+* `[abc]`: matches a, b, or c.
+* `[^abc]`: matches anything except a, b, or c.
+
+Remember, to create a regular expression containing `\d` or `\s`, you’ll need to escape the `\` for the string, so you’ll type `\\d` or `\\s`.
+
+---
+
+# Repetition
+
+We can also look for how many times a pattern matches:
+
+* ?: 0 or 1
+* +: 1 or more
+* *: 0 or more
+* {n}: exactly n
+* {n,}: n or more
+* {,m}: at most m
+* {n,m}: between n and m
+
+
+```r
+x &lt;- c("apple", "banana", "pear")
+str_view(x, "[a-z]{2}")
+```
+
+<div id="htmlwidget-6be9c491e503b30a8d8a" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6be9c491e503b30a8d8a">{"x":{"html":"<ul>\n  <li><span class='match'>ap<\/span>ple<\/li>\n  <li><span class='match'>ba<\/span>nana<\/li>\n  <li><span class='match'>pe<\/span>ar<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+---
+
+# Grouping and backreferences
+
+---
+
+# Excercises
+
+Using `stringr::words`, create regular expressions that find all words that:
+
+1. Start with “y”.
+2. End with “x”
+3. Are exactly three letters long. (Don’t cheat by using `str_length()`!)
+4. Have seven letters or more.
+5. Start with a vowel.
+6. That only contain consonants. (Hint: thinking about matching “not” - vowels.)
+7. End with ed, but not with eed.
+8. End with ing or ise.
+
+Since this list is long, you might want to use the match argument to `str_view()` to show only the matching or non-matching words. E.g. 
+
+
+```r
+str_view(words, pattern = "an", match = TRUE)
+```
+
+<div id="htmlwidget-ea6e0f3f54b9f8701d03" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ea6e0f3f54b9f8701d03">{"x":{"html":"<ul>\n  <li><span class='match'>an<\/span>d<\/li>\n  <li><span class='match'>an<\/span>other<\/li>\n  <li><span class='match'>an<\/span>swer<\/li>\n  <li><span class='match'>an<\/span>y<\/li>\n  <li>arr<span class='match'>an<\/span>ge<\/li>\n  <li>bal<span class='match'>an<\/span>ce<\/li>\n  <li>b<span class='match'>an<\/span>k<\/li>\n  <li>brilli<span class='match'>an<\/span>t<\/li>\n  <li>c<span class='match'>an<\/span><\/li>\n  <li>chairm<span class='match'>an<\/span><\/li>\n  <li>ch<span class='match'>an<\/span>ce<\/li>\n  <li>ch<span class='match'>an<\/span>ge<\/li>\n  <li>cle<span class='match'>an<\/span><\/li>\n  <li>comp<span class='match'>an<\/span>y<\/li>\n  <li>d<span class='match'>an<\/span>ger<\/li>\n  <li>fin<span class='match'>an<\/span>ce<\/li>\n  <li>fr<span class='match'>an<\/span>ce<\/li>\n  <li>germ<span class='match'>an<\/span>y<\/li>\n  <li>gr<span class='match'>an<\/span>d<\/li>\n  <li>gr<span class='match'>an<\/span>t<\/li>\n  <li>h<span class='match'>an<\/span>d<\/li>\n  <li>h<span class='match'>an<\/span>g<\/li>\n  <li>husb<span class='match'>an<\/span>d<\/li>\n  <li>import<span class='match'>an<\/span>t<\/li>\n  <li>l<span class='match'>an<\/span>d<\/li>\n  <li>l<span class='match'>an<\/span>guage<\/li>\n  <li>m<span class='match'>an<\/span><\/li>\n  <li>m<span class='match'>an<\/span>age<\/li>\n  <li>m<span class='match'>an<\/span>y<\/li>\n  <li>me<span class='match'>an<\/span><\/li>\n  <li>me<span class='match'>an<\/span>ing<\/li>\n  <li>org<span class='match'>an<\/span>ize<\/li>\n  <li>pl<span class='match'>an<\/span><\/li>\n  <li>r<span class='match'>an<\/span>ge<\/li>\n  <li>scotl<span class='match'>an<\/span>d<\/li>\n  <li>st<span class='match'>an<\/span>d<\/li>\n  <li>st<span class='match'>an<\/span>dard<\/li>\n  <li>th<span class='match'>an<\/span><\/li>\n  <li>th<span class='match'>an<\/span>k<\/li>\n  <li>thous<span class='match'>an<\/span>d<\/li>\n  <li>tr<span class='match'>an<\/span>sport<\/li>\n  <li>underst<span class='match'>an<\/span>d<\/li>\n  <li>w<span class='match'>an<\/span>t<\/li>\n  <li>wom<span class='match'>an<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+---
+
+
+You can also specify the number of matches precisely:
+
+* {n}: exactly n
+* {n,}: n or more
+* {,m}: at most m
+* {n,m}: between n and m
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
