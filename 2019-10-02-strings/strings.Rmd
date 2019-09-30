@@ -1,8 +1,8 @@
 ---
-title: "Stringr"
+title: "Super fun times with strings!"
 subtitle: ""
 author: "([\\@RLadiesLancs](https://twitter.com/RLadiesLancs))"
-date: "2019-06-05"
+date: "2019-10-02"
 output:
   xaringan::moon_reader:
     css: ["default", "rladies", "rladies-fonts", "rladies-lancaster.css"]
@@ -76,7 +76,9 @@ knitr::include_graphics("images/stringr.png")
 
 ---
 
-# Subsetting strings
+---
+
+# String length
 
 We first need to load **stringr** and we also need basic string to practice on 
 
@@ -84,6 +86,19 @@ We first need to load **stringr** and we also need basic string to practice on
 library("tidyverse")
 review = "The food was delicious"
 ```
+
+
+* We can find the length of a string with `str_length()` 
+```{r chapter3-11}
+str_length(review)
+```
+
+* Note that this function counts whitespace
+
+---
+
+# Subsetting strings
+
 
 The function `str_sub()` gives us a handy way to extract characters 
 
@@ -113,10 +128,10 @@ review
 
 # Replacing strings
 
-* Use `str_replace()` to match and replace patterns 
+* Use `str_replace_all()` to match and replace patterns 
 
 ```{r chapter3-6}
-str_replace(review, pattern = "food", 
+str_replace_all(review, pattern = "food", 
             replacement = "service")
 ```
 
@@ -134,28 +149,6 @@ str_detect(review, "delicious")
 str_which(review, "delicious")
 str_subset(review, "delicious")
 ```
-
----
-
-# str_extract
-
-* `str_extract()` returns a vector with the pattern
-
-```{r str_which}
-str_extract(review, "unhelpful")
-```
-
-
----
-
-# String length
-
-* We can find the length of a string with `str_length()` 
-```{r chapter3-11}
-str_length(review)
-```
-
-* Note that this function counts whitespace
 
 ---
 
@@ -208,15 +201,18 @@ str_to_title(bad_names)
 
 ---
 
-# Excercises
+# Exercises
 
-1. In code that doesn’t use stringr, you’ll often see `paste()` and `paste0()`. What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA? What about `glue()`?
 
-2. In your own words, describe the difference between the sep and collapse arguments to `str_c()`.
+Using `stringr::sentences`, answer the following.
 
-3. Use `str_length()` and `str_sub()` to extract the middle character from a string. What will you do if the string has an even number of characters?
+1. How many sentences contain the word "green"?
+2. Which sentence has the most characters? Hint: look at the help for `which.max()`
+3. Convert all the sentences to uppercase.
+4. What does `str_count()` do? 
+5. `longword = "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"` Use `str_length()` and `str_sub()` to extract the middle character(s) from `longword`. What will you do if the string has an even number of characters?
+6. Replace all fullstops with exclaimation marks. Hint: you'll need to use `\\.` and `\\!`
 
-4. What does `str_wrap()` do? When might you want to use it?
 
 ---
 
@@ -314,7 +310,8 @@ str_view(x, "^apple$")
 
 There are a number of special patterns that match more than one character.You’ve already seen `.`, which matches any character apart from a newline. 
 
-* `\d`: matches any digit.
+* `\d` or `[0-9]`: matches any digit.
+* `[a-z]`: any letter of the alphabet.
 * `\s:` matches any whitespace (e.g. space, tab, newline).
 * `[abc]`: matches a, b, or c.
 * `[^abc]`: matches anything except a, b, or c.
@@ -350,7 +347,7 @@ str_view(fruit, "(..)\\1", match = TRUE)
 
 ---
 
-# Excercises
+# Exercises
 
 Using `stringr::words`, create regular expressions that find all words that:
 
@@ -364,11 +361,12 @@ Using `stringr::words`, create regular expressions that find all words that:
 8. End with ing or ise.
 9. Contains consecutive triple vowels. (e.g "iou")
 
-Since this list is long, you might want to use the match argument to `str_view()` to show only the matching or non-matching words. E.g. 
+You might want to use the match argument to `str_view()` to show only the matching or non-matching words. Or use `str_subset()`.
 
-```{r}
-str_view(words, pattern = "an", match = TRUE)
+```{r, eval = FALSE}
+str_view(words, pattern = "^ab", match = TRUE)
 ```
----
-
-
+or
+```{r, eval = FALSE}
+str_subset(words, "^ab")
+```

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Stringr</title>
+    <title>Super fun times with strings!</title>
     <meta charset="utf-8" />
     <meta name="author" content="(@RLadiesLancs)" />
-    <meta name="date" content="2019-06-05" />
+    <meta name="date" content="2019-10-02" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rladies.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
@@ -17,9 +17,9 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Stringr
+# Super fun times with strings!
 ### (<a href="https://twitter.com/RLadiesLancs">@RLadiesLancs</a>)
-### 2019-06-05
+### 2019-10-02
 
 ---
 
@@ -83,7 +83,9 @@ library("stringr")
 
 ---
 
-# Subsetting strings
+---
+
+# String length
 
 We first need to load **stringr** and we also need basic string to practice on 
 
@@ -92,6 +94,24 @@ We first need to load **stringr** and we also need basic string to practice on
 library("tidyverse")
 review = "The food was delicious"
 ```
+
+
+* We can find the length of a string with `str_length()` 
+
+```r
+str_length(review)
+```
+
+```
+## [1] 22
+```
+
+* Note that this function counts whitespace
+
+---
+
+# Subsetting strings
+
 
 The function `str_sub()` gives us a handy way to extract characters 
 
@@ -136,11 +156,11 @@ review
 
 # Replacing strings
 
-* Use `str_replace()` to match and replace patterns 
+* Use `str_replace_all()` to match and replace patterns 
 
 
 ```r
-str_replace(review, pattern = "food", 
+str_replace_all(review, pattern = "food", 
             replacement = "service")
 ```
 
@@ -181,38 +201,6 @@ str_subset(review, "delicious")
 ```
 ## [1] "The food was delicious"
 ```
-
----
-
-# str_extract
-
-* `str_extract()` returns a vector with the pattern
-
-
-```r
-str_extract(review, "unhelpful")
-```
-
-```
-## [1] NA          "unhelpful" NA
-```
-
-
----
-
-# String length
-
-* We can find the length of a string with `str_length()` 
-
-```r
-str_length(review)
-```
-
-```
-## [1] 22 24 18
-```
-
-* Note that this function counts whitespace
 
 ---
 
@@ -297,7 +285,7 @@ str_to_title(bad_names)
 
 ---
 
-# Excercises
+# Exercises
 
 1. In code that doesn’t use stringr, you’ll often see `paste()` and `paste0()`. What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA? What about `glue()`?
 
@@ -321,8 +309,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "an")
 ```
 
-<div id="htmlwidget-285bf53539154ac401c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-285bf53539154ac401c2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9bbf84bbc829d3a09a99" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9bbf84bbc829d3a09a99">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -335,8 +323,8 @@ The next step up in complexity is `.`, which matches any character (except a new
 str_view(x, ".a.")
 ```
 
-<div id="htmlwidget-506d427e20cbd9604f80" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-506d427e20cbd9604f80">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-78bb475fd0b50725f235" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-78bb475fd0b50725f235">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -354,8 +342,8 @@ For example, to find the phrase `a.c`
 str_view(c("abc", "a.c", "bef"), "a\\.c")
 ```
 
-<div id="htmlwidget-b9092eed6fdd57920b76" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b9092eed6fdd57920b76">{"x":{"html":"<ul>\n  <li>abc<\/li>\n  <li><span class='match'>a.c<\/span><\/li>\n  <li>bef<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0e69a7a75019f36d0abf" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0e69a7a75019f36d0abf">{"x":{"html":"<ul>\n  <li>abc<\/li>\n  <li><span class='match'>a.c<\/span><\/li>\n  <li>bef<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -372,8 +360,8 @@ x &lt;- c("apple", "banana", "pear", "plum\\peach")
 str_view(x, "\\\\")
 ```
 
-<div id="htmlwidget-717d1bce8600248de8c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-717d1bce8600248de8c2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n  <li>plum<span class='match'>\\<\/span>peach<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-59e71467541037e88be2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-59e71467541037e88be2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n  <li>plum<span class='match'>\\<\/span>peach<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -389,8 +377,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "^a")
 ```
 
-<div id="htmlwidget-76009cfb51b607f02245" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-76009cfb51b607f02245">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-286f2d73123d904aa473" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-286f2d73123d904aa473">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -406,8 +394,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "a$")
 ```
 
-<div id="htmlwidget-166a00611d5ec48ef2e0" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-166a00611d5ec48ef2e0">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-30163434b92520f58c23" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-30163434b92520f58c23">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -422,8 +410,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "^apple$")
 ```
 
-<div id="htmlwidget-488a9f67d2f4c410e7c2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-488a9f67d2f4c410e7c2">{"x":{"html":"<ul>\n  <li><span class='match'>apple<\/span><\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-89b2733954a09209ba7a" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-89b2733954a09209ba7a">{"x":{"html":"<ul>\n  <li><span class='match'>apple<\/span><\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -435,6 +423,8 @@ There are a number of special patterns that match more than one character.You’
 * `\s:` matches any whitespace (e.g. space, tab, newline).
 * `[abc]`: matches a, b, or c.
 * `[^abc]`: matches anything except a, b, or c.
+* `[0-9]`: any numberic character.
+* `[a-z]`: any letter of the alphabet.
 
 Remember, to create a regular expression containing `\d` or `\s`, you’ll need to escape the `\` for the string, so you’ll type `\\d` or `\\s`.
 
@@ -448,25 +438,34 @@ We can also look for how many times a pattern matches:
 * +: 1 or more
 * *: 0 or more
 * {n}: exactly n
-* {n,}: n or more
-* {,m}: at most m
-* {n,m}: between n and m
+* {n, }: n or more
+* {, m}: at most m
+* {n, m}: between n and m
 
 
 ```r
-x &lt;- c("apple", "banana", "pear")
-str_view(x, "[a-z]{2}")
+x &lt;- c("colour", "color", "colours")
+str_view(x, "colo(u)?r")
 ```
 
-<div id="htmlwidget-6be9c491e503b30a8d8a" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6be9c491e503b30a8d8a">{"x":{"html":"<ul>\n  <li><span class='match'>ap<\/span>ple<\/li>\n  <li><span class='match'>ba<\/span>nana<\/li>\n  <li><span class='match'>pe<\/span>ar<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b8719c8c4a7931a9fdec" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b8719c8c4a7931a9fdec">{"x":{"html":"<ul>\n  <li><span class='match'>colour<\/span><\/li>\n  <li><span class='match'>color<\/span><\/li>\n  <li><span class='match'>colour<\/span>s<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
 ---
 
 # Grouping and backreferences
 
+
+```r
+str_view(fruit, "(..)\\1", match = TRUE)
+```
+
+<div id="htmlwidget-68b1c91c2d0ba18d492d" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-68b1c91c2d0ba18d492d">{"x":{"html":"<ul>\n  <li>b<span class='match'>anan<\/span>a<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+
 ---
 
-# Excercises
+# Exercises
 
 Using `stringr::words`, create regular expressions that find all words that:
 
@@ -478,25 +477,19 @@ Using `stringr::words`, create regular expressions that find all words that:
 6. That only contain consonants. (Hint: thinking about matching “not” - vowels.)
 7. End with ed, but not with eed.
 8. End with ing or ise.
+9. Contains consecutive triple vowels. (e.g "iou")
 
-Since this list is long, you might want to use the match argument to `str_view()` to show only the matching or non-matching words. E.g. 
+You might want to use the match argument to `str_view()` to show only the matching or non-matching words. Or use `str_subset()`.
 
 
 ```r
-str_view(words, pattern = "an", match = TRUE)
+str_view(words, pattern = "^ab", match = TRUE)
 ```
+or
 
-<div id="htmlwidget-ea6e0f3f54b9f8701d03" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ea6e0f3f54b9f8701d03">{"x":{"html":"<ul>\n  <li><span class='match'>an<\/span>d<\/li>\n  <li><span class='match'>an<\/span>other<\/li>\n  <li><span class='match'>an<\/span>swer<\/li>\n  <li><span class='match'>an<\/span>y<\/li>\n  <li>arr<span class='match'>an<\/span>ge<\/li>\n  <li>bal<span class='match'>an<\/span>ce<\/li>\n  <li>b<span class='match'>an<\/span>k<\/li>\n  <li>brilli<span class='match'>an<\/span>t<\/li>\n  <li>c<span class='match'>an<\/span><\/li>\n  <li>chairm<span class='match'>an<\/span><\/li>\n  <li>ch<span class='match'>an<\/span>ce<\/li>\n  <li>ch<span class='match'>an<\/span>ge<\/li>\n  <li>cle<span class='match'>an<\/span><\/li>\n  <li>comp<span class='match'>an<\/span>y<\/li>\n  <li>d<span class='match'>an<\/span>ger<\/li>\n  <li>fin<span class='match'>an<\/span>ce<\/li>\n  <li>fr<span class='match'>an<\/span>ce<\/li>\n  <li>germ<span class='match'>an<\/span>y<\/li>\n  <li>gr<span class='match'>an<\/span>d<\/li>\n  <li>gr<span class='match'>an<\/span>t<\/li>\n  <li>h<span class='match'>an<\/span>d<\/li>\n  <li>h<span class='match'>an<\/span>g<\/li>\n  <li>husb<span class='match'>an<\/span>d<\/li>\n  <li>import<span class='match'>an<\/span>t<\/li>\n  <li>l<span class='match'>an<\/span>d<\/li>\n  <li>l<span class='match'>an<\/span>guage<\/li>\n  <li>m<span class='match'>an<\/span><\/li>\n  <li>m<span class='match'>an<\/span>age<\/li>\n  <li>m<span class='match'>an<\/span>y<\/li>\n  <li>me<span class='match'>an<\/span><\/li>\n  <li>me<span class='match'>an<\/span>ing<\/li>\n  <li>org<span class='match'>an<\/span>ize<\/li>\n  <li>pl<span class='match'>an<\/span><\/li>\n  <li>r<span class='match'>an<\/span>ge<\/li>\n  <li>scotl<span class='match'>an<\/span>d<\/li>\n  <li>st<span class='match'>an<\/span>d<\/li>\n  <li>st<span class='match'>an<\/span>dard<\/li>\n  <li>th<span class='match'>an<\/span><\/li>\n  <li>th<span class='match'>an<\/span>k<\/li>\n  <li>thous<span class='match'>an<\/span>d<\/li>\n  <li>tr<span class='match'>an<\/span>sport<\/li>\n  <li>underst<span class='match'>an<\/span>d<\/li>\n  <li>w<span class='match'>an<\/span>t<\/li>\n  <li>wom<span class='match'>an<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
----
-
-
-You can also specify the number of matches precisely:
-
-* {n}: exactly n
-* {n,}: n or more
-* {,m}: at most m
-* {n,m}: between n and m
+```r
+str_subset(words, "^ab")
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
