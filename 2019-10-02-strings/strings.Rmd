@@ -1,0 +1,66 @@
+---
+title: "Data Transformation"
+subtitle: ""
+author: "([\\@RLadiesLancs](https://twitter.com/RLadiesLancs))"
+date: "2019-06-05"
+output:
+  xaringan::moon_reader:
+    css: ["default", "rladies", "rladies-fonts", "rladies-lancaster.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+layout: true
+
+<div class = "rladies-header">
+<span class="social"><table><tr><td><img src="images/twitter.gif"/></td><td> @RLadiesLancs</td></tr></table></span>
+</div>
+
+```{r setup, echo = FALSE}
+library("emo")
+```
+
+---
+
+# Tonight
+
+* 18:00 - 18:50 - `filter()`, `arrange()` and `select()`
+* 18:50 - 19:15 - Nibbles and networking `r emo::ji("cheese")`
+* 19:15 - 20:00 - `mutate()` and `summarise()`
+
+
+### Slides: [github.com/rladies](https://github.com/rladies/)
+
+### Book chapter: [r4ds.had.co.nz](https://r4ds.had.co.nz/transform.html)
+
+### Slack: [bit.ly/R4DSslack](https://bit.ly/R4DSslack )
+
+---
+
+# Jumping Rivers
+
+```{r, out.width = "250px", fig.align='center', echo = FALSE}
+knitr::include_graphics("images/jr.png")
+```
+
+---
+# dplyr and Tidyverse
+
+To access the datasets, help pages, and functions that we will use tonight, load the tidyverse by running this code:
+
+```{r install tidyverse, eval = FALSE}
+install.packages("stringr")
+```
+
+```{r load libraries, message=FALSE}
+library("stringr")
+```
+
+```{r, out.width = "250px", fig.align='center', echo = FALSE}
+knitr::include_graphics("images/stringr.png")
+```
+
+Cheatsheet: https://github.com/rstudio/cheatsheets/blob/master/strings.pdf
+
