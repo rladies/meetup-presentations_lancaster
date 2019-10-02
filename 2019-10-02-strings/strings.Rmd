@@ -76,8 +76,6 @@ knitr::include_graphics("images/stringr.png")
 
 ---
 
----
-
 # String length
 
 We first need to load **stringr** and we also need basic string to practice on 
@@ -203,16 +201,20 @@ str_to_title(bad_names)
 
 # Exercises
 
+1. Set `longword = "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"`
 
-Using `stringr::sentences`, answer the following.
+ - Use str_subset to extract the first 16 letters 
+ - What is the 10th letter?  Use `str_length()`to extract the middle two character(s)
 
-1. How many sentences contain the word "green"?
-2. Which sentence has the most characters? Hint: look at the help for `which.max()`
-3. Convert all the sentences to uppercase.
-4. What does `str_count()` do? 
-5. `longword = "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"` Use `str_length()` and `str_sub()` to extract the middle character(s) from `longword`. What will you do if the string has an even number of characters?
-6. Replace all fullstops with exclaimation marks. Hint: you'll need to use `\\.` and `\\!`
+2. Using `stringr::sentences`, answer the following.
 
+ * How many sentences contain the word "green"?
+ * Which sentence has the most characters? Hint: look at the help for `which.max()`
+ * Convert all the sentences to uppercase.
+ * What does `str_count()` do? 
+ * Replace all fullstops with exclaimation marks. Hint: you'll need to use `\\.` and `\\!`
+
+### Slies `r emo::ji("teacher")` [github.com/rladies](https://github.com/rladies/)
 
 ---
 
@@ -317,6 +319,11 @@ There are a number of special patterns that match more than one character.You’
 * `[^abc]`: matches anything except a, b, or c.
 
 Remember, to create a regular expression containing `\d` or `\s`, you’ll need to escape the `\` for the string, so you’ll type `\\d` or `\\s`.
+
+```{r}
+x <- c("apple1", "apple2", "apple", "banana")
+str_view(x, "apple[0-9]")
+```
 
 ---
 

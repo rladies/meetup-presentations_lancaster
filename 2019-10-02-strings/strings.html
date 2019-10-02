@@ -83,8 +83,6 @@ library("stringr")
 
 ---
 
----
-
 # String length
 
 We first need to load **stringr** and we also need basic string to practice on 
@@ -287,13 +285,20 @@ str_to_title(bad_names)
 
 # Exercises
 
-1. In code that doesn’t use stringr, you’ll often see `paste()` and `paste0()`. What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA? What about `glue()`?
+1. Set `longword = "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch"`
 
-2. In your own words, describe the difference between the sep and collapse arguments to `str_c()`.
+ - Use str_subset to extract the first 16 letters 
+ - What is the 10th letter?  Use `str_length()`to extract the middle two character(s)
 
-3. Use `str_length()` and `str_sub()` to extract the middle character from a string. What will you do if the string has an even number of characters?
+2. Using `stringr::sentences`, answer the following.
 
-4. What does `str_wrap()` do? When might you want to use it?
+ * How many sentences contain the word "green"?
+ * Which sentence has the most characters? Hint: look at the help for `which.max()`
+ * Convert all the sentences to uppercase.
+ * What does `str_count()` do? 
+ * Replace all fullstops with exclaimation marks. Hint: you'll need to use `\\.` and `\\!`
+
+### Slies 👨‍🏫 [github.com/rladies](https://github.com/rladies/)
 
 ---
 
@@ -309,8 +314,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "an")
 ```
 
-<div id="htmlwidget-9bbf84bbc829d3a09a99" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9bbf84bbc829d3a09a99">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-91f2aacfe1952018963a" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-91f2aacfe1952018963a">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -323,8 +328,8 @@ The next step up in complexity is `.`, which matches any character (except a new
 str_view(x, ".a.")
 ```
 
-<div id="htmlwidget-78bb475fd0b50725f235" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-78bb475fd0b50725f235">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-89ba0c7285ac16055bb5" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-89ba0c7285ac16055bb5">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -342,8 +347,8 @@ For example, to find the phrase `a.c`
 str_view(c("abc", "a.c", "bef"), "a\\.c")
 ```
 
-<div id="htmlwidget-0e69a7a75019f36d0abf" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0e69a7a75019f36d0abf">{"x":{"html":"<ul>\n  <li>abc<\/li>\n  <li><span class='match'>a.c<\/span><\/li>\n  <li>bef<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a287aad4b9cc69eed2b5" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a287aad4b9cc69eed2b5">{"x":{"html":"<ul>\n  <li>abc<\/li>\n  <li><span class='match'>a.c<\/span><\/li>\n  <li>bef<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -360,8 +365,8 @@ x &lt;- c("apple", "banana", "pear", "plum\\peach")
 str_view(x, "\\\\")
 ```
 
-<div id="htmlwidget-59e71467541037e88be2" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-59e71467541037e88be2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n  <li>plum<span class='match'>\\<\/span>peach<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-61cb9136e29bf98461b2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-61cb9136e29bf98461b2">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n  <li>plum<span class='match'>\\<\/span>peach<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -377,8 +382,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "^a")
 ```
 
-<div id="htmlwidget-286f2d73123d904aa473" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-286f2d73123d904aa473">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6f33c95ed8e9817c7b1d" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6f33c95ed8e9817c7b1d">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -394,8 +399,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "a$")
 ```
 
-<div id="htmlwidget-30163434b92520f58c23" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-30163434b92520f58c23">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-039aa0bf28763522d176" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-039aa0bf28763522d176">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -410,8 +415,8 @@ x &lt;- c("apple", "banana", "pear")
 str_view(x, "^apple$")
 ```
 
-<div id="htmlwidget-89b2733954a09209ba7a" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-89b2733954a09209ba7a">{"x":{"html":"<ul>\n  <li><span class='match'>apple<\/span><\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e70dd63317597d5d71ae" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e70dd63317597d5d71ae">{"x":{"html":"<ul>\n  <li><span class='match'>apple<\/span><\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -419,14 +424,22 @@ str_view(x, "^apple$")
 
 There are a number of special patterns that match more than one character.You’ve already seen `.`, which matches any character apart from a newline. 
 
-* `\d`: matches any digit.
+* `\d` or `[0-9]`: matches any digit.
+* `[a-z]`: any letter of the alphabet.
 * `\s:` matches any whitespace (e.g. space, tab, newline).
 * `[abc]`: matches a, b, or c.
 * `[^abc]`: matches anything except a, b, or c.
-* `[0-9]`: any numberic character.
-* `[a-z]`: any letter of the alphabet.
 
 Remember, to create a regular expression containing `\d` or `\s`, you’ll need to escape the `\` for the string, so you’ll type `\\d` or `\\s`.
+
+
+```r
+x &lt;- c("apple1", "apple2", "apple", "banana")
+str_view(x, "apple[0-9]")
+```
+
+<div id="htmlwidget-b199211830c1b7a54de9" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b199211830c1b7a54de9">{"x":{"html":"<ul>\n  <li><span class='match'>apple1<\/span><\/li>\n  <li><span class='match'>apple2<\/span><\/li>\n  <li>apple<\/li>\n  <li>banana<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -448,8 +461,8 @@ x &lt;- c("colour", "color", "colours")
 str_view(x, "colo(u)?r")
 ```
 
-<div id="htmlwidget-b8719c8c4a7931a9fdec" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b8719c8c4a7931a9fdec">{"x":{"html":"<ul>\n  <li><span class='match'>colour<\/span><\/li>\n  <li><span class='match'>color<\/span><\/li>\n  <li><span class='match'>colour<\/span>s<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9a8774b0bf99a4ef464d" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9a8774b0bf99a4ef464d">{"x":{"html":"<ul>\n  <li><span class='match'>colour<\/span><\/li>\n  <li><span class='match'>color<\/span><\/li>\n  <li><span class='match'>colour<\/span>s<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -460,8 +473,8 @@ str_view(x, "colo(u)?r")
 str_view(fruit, "(..)\\1", match = TRUE)
 ```
 
-<div id="htmlwidget-68b1c91c2d0ba18d492d" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-68b1c91c2d0ba18d492d">{"x":{"html":"<ul>\n  <li>b<span class='match'>anan<\/span>a<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-df7ddb3f079aba9ed8b2" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-df7ddb3f079aba9ed8b2">{"x":{"html":"<ul>\n  <li>b<span class='match'>anan<\/span>a<\/li>\n  <li><span class='match'>coco<\/span>nut<\/li>\n  <li><span class='match'>cucu<\/span>mber<\/li>\n  <li><span class='match'>juju<\/span>be<\/li>\n  <li><span class='match'>papa<\/span>ya<\/li>\n  <li>s<span class='match'>alal<\/span> berry<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
