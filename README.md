@@ -1,5 +1,10 @@
 # meetup-presentations_lancaster
 
+
+## 2019-10-02 Strings
+
+* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-10-02-strings/strings.html)
+
 ## 2019-09-04 Tidy Data
 
 * [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-09-04-tidy-data/tidy-data.html)
