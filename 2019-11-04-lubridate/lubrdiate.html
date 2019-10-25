@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Dates and times with lubridate</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="(@RLadiesLancs)" />
+    <meta name="date" content="2019-10-02" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding-0.9/datatables.js"></script>
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+    <link rel="stylesheet" href="rladies-lancaster.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Dates and times with lubridate
+### (<a href="https://twitter.com/RLadiesLancs">@RLadiesLancs</a>)
+### 2019-10-02
+
+---
+
+layout: true
+
+&lt;div class = "rladies-header"&gt;
+&lt;span class="social"&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src="images/twitter.gif"/&gt;&lt;/td&gt;&lt;td&gt; @RLadiesLancs&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+
+
+---
+
+# Tonight - **lubridate** package 🕟
+
+### Slides 👨‍🏫     [github.com/rladies](https://github.com/rladies/)
+
+### Book chapter 📖     [r4ds.had.co.nz](https://r4ds.had.co.nz/dates-and-times.html)
+
+### Slack 💬     [bit.ly/R4DSslack](https://bit.ly/R4DSslack )
+
+# Thanks to our sponsors 🥨
+&lt;img src="images/h20-logo" width="160px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Libraries
+
+
+```r
+library(tidyverse)
+library(lubridate)
+library(nycflights13)
+```
+
+* **lubridate** is not part of core **tidyverse**
+* **nycflights13** has practice data.
+
+---
+
+# Creating date/times
+
+There are three types of date/time data that refer to an instant in time:
+
+* A __date__. Tibbles print this as `&lt;date&gt;`.
+
+* A __time__ within a day. Tibbles print this as `&lt;time&gt;`.
+
+* A __date-time__ is a date plus a time: it uniquely identifies an
+  instant in time (typically to the nearest second). Tibbles print this
+  as `&lt;dttm&gt;`. Elsewhere in R these are called POSIXct, but I don't think
+  that's a very useful name.
+  
+--------  
+  
+* We're going to focus on dates and date-times.
+* If you need to work with times, you can use the __hms__ package.
+* You should always use the simplest possible data type.
+
+---
+
+# Creating dates
+
+To get the current date or date-time you can use `today()` or `now()`:
+
+
+```r
+today()
+```
+
+```
+## [1] "2019-10-25"
+```
+
+```r
+now()
+```
+
+```
+## [1] "2019-10-25 21:08:48 BST"
+```
+
+Otherwise, there are three ways you're likely to create a date/time:
+
+* From a string.
+* From individual date-time components.
+* From an existing date/time object.
+
+---
+
+# Creating dates from strings
+
+* Date/time data often comes as strings. 
+* Helpers provided by lubridate. 
+* Automatically work out the format once you specify the order of the component. 
+
+
+```r
+ymd("2017-01-31")
+```
+
+```
+## [1] "2017-01-31"
+```
+
+```r
+mdy("January 31st, 2017")
+```
+
+```
+## [1] "2017-01-31"
+```
+
+```r
+dmy("31-Jan-2017")
+```
+
+```
+## [1] "2017-01-31"
+```
+
+* You can also use unquoted numbers
+
+
+```r
+ymd(20170131)
+```
+
+```
+## [1] "2017-01-31"
+```
+
+---
+
+# Creating date-times from strings
+
+`ymd()` and friends create dates. To create a date-time, add an underscore and one or more of "h", "m", and "s" to the name of the parsing function:
+
+
+```r
+ymd_hms("2017-01-31 20:11:59")
+```
+
+```
+## [1] "2017-01-31 20:11:59 UTC"
+```
+
+```r
+mdy_hm("01/31/2017 08:01")
+```
+
+```
+## [1] "2017-01-31 08:01:00 UTC"
+```
+
+You can also force the creation of a date-time from a date by supplying a timezone:
+
+
+```r
+ymd(20170131, tz = "UTC")
+```
+
+```
+## [1] "2017-01-31 UTC"
+```
+
+---
+
+# From individual components
+
+Instead of a single string, sometimes you'll have the individual components of the date-time spread across multiple columns. This is what we have in the flights data:
+
+
+```r
+flights %&gt;% 
+  select(year, month, day, hour, minute)  %&gt;%
+  head() %&gt;%
+  DT::datatable()
+```
+
+<div id="htmlwidget-450b3712af51b38df0ec" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-450b3712af51b38df0ec">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2013,2013,2013,2013,2013,2013],[1,1,1,1,1,1],[1,1,1,1,1,1],[5,5,5,5,6,5],[15,29,40,45,0,58]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>year<\/th>\n      <th>month<\/th>\n      <th>day<\/th>\n      <th>hour<\/th>\n      <th>minute<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+#  From individual components
+
+Use `make_date()` for dates, or `make_datetime()` for date-times:
+
+
+```r
+flights %&gt;% 
+  select(year, month, day, hour, minute) %&gt;% 
+  mutate(departure = make_datetime(year, month, day, hour, minute)) %&gt;%
+  head() %&gt;% DT::datatable()
+```
+
+<div id="htmlwidget-898562e81b255ba56abc" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-898562e81b255ba56abc">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],[2013,2013,2013,2013,2013,2013],[1,1,1,1,1,1],[1,1,1,1,1,1],[5,5,5,5,6,5],[15,29,40,45,0,58],["2013-01-01T05:15:00Z","2013-01-01T05:29:00Z","2013-01-01T05:40:00Z","2013-01-01T05:45:00Z","2013-01-01T06:00:00Z","2013-01-01T05:58:00Z"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>year<\/th>\n      <th>month<\/th>\n      <th>day<\/th>\n      <th>hour<\/th>\n      <th>minute<\/th>\n      <th>departure<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+# `make_datetime()`
+
+Let's do the same thing for each of the four time columns in `flights`. The times are represented in a slightly odd format, so we use modulus arithmetic to pull out the hour and minute components. Once I've created the date-time variables, I focus in on the variables we'll explore in the rest of the chapter.
+
+
+```r
+make_datetime_100 &lt;- function(year, month, day, time) {
+  make_datetime(year, month, day, time %/% 100, time %% 100)
+}
+
+flights_dt &lt;- flights %&gt;% 
+  filter(!is.na(dep_time), !is.na(arr_time)) %&gt;% 
+  mutate(
+    dep_time = make_datetime_100(year, month, day, dep_time),
+    arr_time = make_datetime_100(year, month, day, arr_time),
+    sched_dep_time = make_datetime_100(year, month, day, sched_dep_time),
+    sched_arr_time = make_datetime_100(year, month, day, sched_arr_time)
+  ) %&gt;% 
+  select(origin, dest, ends_with("delay"), ends_with("time"))
+```
+
+<div id="htmlwidget-258b2d3c53e214bbe975" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-258b2d3c53e214bbe975">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["EWR","LGA","JFK","JFK","LGA","EWR"],["IAH","IAH","MIA","BQN","ATL","ORD"],[2,4,2,-1,-6,-4],[11,20,33,-18,-25,12],["2013-01-01T05:17:00Z","2013-01-01T05:33:00Z","2013-01-01T05:42:00Z","2013-01-01T05:44:00Z","2013-01-01T05:54:00Z","2013-01-01T05:54:00Z"],["2013-01-01T05:15:00Z","2013-01-01T05:29:00Z","2013-01-01T05:40:00Z","2013-01-01T05:45:00Z","2013-01-01T06:00:00Z","2013-01-01T05:58:00Z"],["2013-01-01T08:30:00Z","2013-01-01T08:50:00Z","2013-01-01T09:23:00Z","2013-01-01T10:04:00Z","2013-01-01T08:12:00Z","2013-01-01T07:40:00Z"],["2013-01-01T08:19:00Z","2013-01-01T08:30:00Z","2013-01-01T08:50:00Z","2013-01-01T10:22:00Z","2013-01-01T08:37:00Z","2013-01-01T07:28:00Z"],[227,227,160,183,116,150]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>origin<\/th>\n      <th>dest<\/th>\n      <th>dep_delay<\/th>\n      <th>arr_delay<\/th>\n      <th>dep_time<\/th>\n      <th>sched_dep_time<\/th>\n      <th>arr_time<\/th>\n      <th>sched_arr_time<\/th>\n      <th>air_time<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+# Plotting departure times
+
+With this data, I can visualise the distribution of departure times across the year:
+
+
+```r
+flights_dt %&gt;% 
+  ggplot(aes(dep_time)) + 
+  geom_freqpoly(binwidth = 86400) # 86400 seconds = 1 day
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+Or within a single day:
+
+
+```r
+flights_dt %&gt;% 
+  filter(dep_time &lt; ymd(20130102)) %&gt;% 
+  ggplot(aes(dep_time)) + 
+  geom_freqpoly(binwidth = 600) # 600 s = 10 minutes
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+Note that when you use date-times in a numeric context (like in a histogram), 1 means 1 second, so a binwidth of 86400 means one day. For dates, 1 means 1 day.
+
+---
+
+# From other types
+
+You may want to switch between a date-time and a date. That's the job of `as_datetime()` and `as_date()`:
+
+
+```r
+as_datetime(today())
+```
+
+```
+## [1] "2019-10-25 UTC"
+```
+
+```r
+as_date(now())
+```
+
+```
+## [1] "2019-10-25"
+```
+
+Sometimes you'll get date/times as numeric offsets from the "Unix Epoch", 1970-01-01. If the offset is in seconds, use `as_datetime()`; if it's in days, use `as_date()`.
+
+
+```r
+as_datetime(60 * 60 * 10)
+```
+
+```
+## [1] "1970-01-01 10:00:00 UTC"
+```
+
+```r
+as_date(365 * 10 + 2)
+```
+
+```
+## [1] "1980-01-01"
+```
+
+---
+
+# Exercises
+
+1.  What happens if you parse a string that contains invalid dates?
+    
+    ```r
+    ymd(c("2010-10-10", "bananas"))
+    ```
+    
+1.  What does the `tzone` argument to `today()` do? Why is it important?
+
+1.  Use the appropriate lubridate function to parse each of the following dates:
+
+
+```r
+    d1 &lt;- "January 1, 2010"
+    d2 &lt;- "2015-Mar-07"
+    d3 &lt;- "06-Jun-2017"
+    d4 &lt;- c("August 19 (2015)", "July 1 (2015)")
+    d5 &lt;- "12/30/14" # Dec 30, 2014
+```
+
+---
+
+# Extracting components
+
+You can pull out individual parts of the date withthe following functions
+* `year()`
+* `month()`
+* `mday()` (day of the month)
+* `yday()` (day of the year)
+* `wday()` (day of the week)
+* `hour()`
+* `minute()`
+* `second()`
+
+
+```r
+datetime &lt;- ymd_hms("2016-07-08 12:34:56")
+
+year(datetime)
+```
+
+```
+## [1] 2016
+```
+
+```r
+month(datetime)
+```
+
+```
+## [1] 7
+```
+
+```r
+mday(datetime)
+```
+
+```
+## [1] 8
+```
+
+```r
+yday(datetime)
+```
+
+```
+## [1] 190
+```
+
+```r
+wday(datetime)
+```
+
+```
+## [1] 6
+```
+
+For `month()` and `wday()` you can set `label = TRUE` to return the abbreviated name of the month or day of the week. Set `abbr = FALSE` to return the full name.
+
+
+```r
+month(datetime, label = TRUE)
+```
+
+```
+## [1] Jul
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec
+```
+
+```r
+wday(datetime, label = TRUE, abbr = FALSE)
+```
+
+```
+## [1] Friday
+## 7 Levels: Sunday &lt; Monday &lt; Tuesday &lt; Wednesday &lt; Thursday &lt; ... &lt; Saturday
+```
+
+We can use `wday()` to see that more flights depart during the week than on the weekend:
+
+
+```r
+flights_dt %&gt;% 
+  mutate(wday = wday(dep_time, label = TRUE)) %&gt;% 
+  ggplot(aes(x = wday)) +
+    geom_bar()
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+There's an interesting pattern if we look at the average departure delay by minute within the hour. It looks like flights leaving in minutes 20-30 and 50-60 have much lower delays than the rest of the hour!
+
+
+```r
+flights_dt %&gt;% 
+  mutate(minute = minute(dep_time)) %&gt;% 
+  group_by(minute) %&gt;% 
+  summarise(
+    avg_delay = mean(arr_delay, na.rm = TRUE),
+    n = n()) %&gt;% 
+  ggplot(aes(minute, avg_delay)) +
+    geom_line()
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+Interestingly, if we look at the _scheduled_ departure time we don't see such a strong pattern:
+
+
+```r
+sched_dep &lt;- flights_dt %&gt;% 
+  mutate(minute = minute(sched_dep_time)) %&gt;% 
+  group_by(minute) %&gt;% 
+  summarise(
+    avg_delay = mean(arr_delay, na.rm = TRUE),
+    n = n())
+
+ggplot(sched_dep, aes(minute, avg_delay)) +
+  geom_line()
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+So why do we see that pattern with the actual departure times? Well, like much data collected by humans, there's a strong bias towards flights leaving at "nice" departure times. Always be alert for this sort of pattern whenever you work with data that involves human judgement!
+
+
+```r
+ggplot(sched_dep, aes(minute, n)) +
+  geom_line()
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+
+# Rounding
+
+Sometime we want to round the date to the nearest unit of time.
+
+* `floor_date()`
+* `round_date()`
+* `ceiling_date()`
+
+Say we want to plot the number of flights per week:
+
+
+```r
+flights_dt %&gt;% 
+  count(week = floor_date(dep_time, "week")) %&gt;% 
+  ggplot(aes(week, n)) + geom_line()
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+
+# Setting components
+
+You can also use each accessor function to set the components of a date/time: 
+
+
+```r
+(datetime &lt;- ymd_hms("2016-07-08 12:34:56"))
+```
+
+```
+## [1] "2016-07-08 12:34:56 UTC"
+```
+
+```r
+year(datetime) &lt;- 2020
+datetime
+```
+
+```
+## [1] "2020-07-08 12:34:56 UTC"
+```
+
+```r
+month(datetime) &lt;- 01
+datetime
+```
+
+```
+## [1] "2020-01-08 12:34:56 UTC"
+```
+
+```r
+hour(datetime) &lt;- hour(datetime) + 1
+datetime
+```
+
+```
+## [1] "2020-01-08 13:34:56 UTC"
+```
+
+Alternatively, rather than modifying in place, you can create a new date-time with `update()`. This also allows you to set multiple values at once.
+
+
+```r
+update(datetime, year = 2020, month = 2, mday = 2, hour = 2)
+```
+
+```
+## [1] "2020-02-02 02:34:56 UTC"
+```
+
+If values are too big, they will roll-over:
+
+
+```r
+ymd("2015-02-01") %&gt;% 
+  update(mday = 30)
+```
+
+```
+## [1] "2015-03-02"
+```
+
+```r
+ymd("2015-02-01") %&gt;% 
+  update(hour = 400)
+```
+
+```
+## [1] "2015-02-17 16:00:00 UTC"
+```
+
+You can use `update()` to show the distribution of flights across the course of the day for every day of the year: 
+
+
+```r
+flights_dt %&gt;% 
+  mutate(dep_hour = update(dep_time, yday = 1)) %&gt;% 
+  ggplot(aes(dep_hour)) +
+    geom_freqpoly(binwidth = 300)
+```
+
+![](lubrdiate_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+Setting larger components of a date to a constant is a powerful technique that allows you to explore patterns in the smaller components.
+
+---
+
+# Exercises
+
+1.  How does the distribution of flight times within a day change over the 
+    course of the year?
+    
+1.  Compare `dep_time`, `sched_dep_time` and `dep_delay`. Are they consistent?
+    Explain your findings.
+
+1.  Compare `air_time` with the duration between the departure and arrival.
+    Explain your findings. (Hint: consider the location of the airport.)
+    
+1.  How does the average delay time change over the course of a day?
+    Should you use `dep_time` or `sched_dep_time`? Why?
+
+1.  On what day of the week should you leave if you want to minimise the
+    chance of a delay?
+
+1.  What makes the distribution of `diamonds$carat` and 
+    `flights$sched_dep_time` similar?
+
+1.  Confirm my hypothesis that the early departures of flights in minutes
+    20-30 and 50-60 are caused by scheduled flights that leave early. 
+    Hint: create a binary variable that tells you whether or not a flight 
+    was delayed.
+
+---
+
+# Time spans
+
+Next you'll learn about how arithmetic with dates works, including subtraction, addition, and division. Along the way, you'll learn about three important classes that represent time spans:
+
+* __durations__, which represent an exact number of seconds.
+* __periods__, which represent human units like weeks and months.
+* __intervals__, which represent a starting and ending point.
+
+---
+
+# Durations
+
+In R, when you subtract two dates, you get a difftime object:
+
+
+```r
+# How old is Hadley?
+h_age &lt;- today() - ymd(19791014)
+h_age
+```
+
+```
+## Time difference of 14621 days
+```
+
+A difftime class object records a time span of seconds, minutes, hours, days, or weeks. This ambiguity can make difftimes a little painful to work with, so lubridate provides an alternative which always uses seconds: the __duration__.
+
+
+```r
+as.duration(h_age)
+```
+
+```
+## [1] "1263254400s (~40.03 years)"
+```
+
+Durations come with a bunch of convenient constructors:
+
+
+```r
+dseconds(15)
+```
+
+```
+## [1] "15s"
+```
+
+```r
+dminutes(10)
+```
+
+```
+## [1] "600s (~10 minutes)"
+```
+
+```r
+dhours(c(12, 24))
+```
+
+```
+## [1] "43200s (~12 hours)" "86400s (~1 days)"
+```
+
+```r
+ddays(0:5)
+```
+
+```
+## [1] "0s"                "86400s (~1 days)"  "172800s (~2 days)"
+## [4] "259200s (~3 days)" "345600s (~4 days)" "432000s (~5 days)"
+```
+
+```r
+dweeks(3)
+```
+
+```
+## [1] "1814400s (~3 weeks)"
+```
+
+```r
+dyears(1)
+```
+
+```
+## [1] "31536000s (~52.14 weeks)"
+```
+
+Durations always record the time span in seconds. Larger units are created by converting minutes, hours, days, weeks, and years to seconds at the standard rate (60 seconds in a minute, 60 minutes in an hour, 24 hours in day, 7 days in a week, 365 days in a year).
+
+You can add and multiply durations:
+
+
+```r
+2 * dyears(1)
+```
+
+```
+## [1] "63072000s (~2 years)"
+```
+
+```r
+dyears(1) + dweeks(12) + dhours(15)
+```
+
+```
+## [1] "38847600s (~1.23 years)"
+```
+
+You can add and subtract durations to and from days:
+
+
+```r
+tomorrow &lt;- today() + ddays(1)
+last_year &lt;- today() - dyears(1)
+```
+
+However, because durations represent an exact number of seconds, sometimes you might get an unexpected result:
+
+
+```r
+one_pm &lt;- ymd_hms("2016-03-12 13:00:00", tz = "America/New_York")
+
+one_pm
+```
+
+```
+## [1] "2016-03-12 13:00:00 EST"
+```
+
+```r
+one_pm + ddays(1)
+```
+
+```
+## [1] "2016-03-13 14:00:00 EDT"
+```
+
+Why is one day after 1pm on March 12, 2pm on March 13?! If you look carefully at the date you might also notice that the time zones have changed. Because of DST, March 12 only has 23 hours, so if we add a full days worth of seconds we end up with a different time.
+
+---
+
+# Periods
+
+To solve this problem, lubridate provides __periods__. Periods are time spans but don't have a fixed length in seconds, instead they work with "human" times, like days and months. That allows them work in a more intuitive way:
+
+
+```r
+one_pm
+```
+
+```
+## [1] "2016-03-12 13:00:00 EST"
+```
+
+```r
+one_pm + days(1)
+```
+
+```
+## [1] "2016-03-13 13:00:00 EDT"
+```
+
+Like durations, periods can be created with a number of friendly constructor functions. 
+
+
+```r
+seconds(15)
+```
+
+```
+## [1] "15S"
+```
+
+```r
+minutes(10)
+```
+
+```
+## [1] "10M 0S"
+```
+
+```r
+hours(c(12, 24))
+```
+
+```
+## [1] "12H 0M 0S" "24H 0M 0S"
+```
+
+```r
+days(7)
+```
+
+```
+## [1] "7d 0H 0M 0S"
+```
+
+```r
+months(1:6)
+```
+
+```
+## [1] "1m 0d 0H 0M 0S" "2m 0d 0H 0M 0S" "3m 0d 0H 0M 0S" "4m 0d 0H 0M 0S"
+## [5] "5m 0d 0H 0M 0S" "6m 0d 0H 0M 0S"
+```
+
+```r
+weeks(3)
+```
+
+```
+## [1] "21d 0H 0M 0S"
+```
+
+```r
+years(1)
+```
+
+```
+## [1] "1y 0m 0d 0H 0M 0S"
+```
+
+You can add and multiply periods:
+
+
+```r
+10 * (months(6) + days(1))
+```
+
+```
+## [1] "60m 10d 0H 0M 0S"
+```
+
+```r
+days(50) + hours(25) + minutes(2)
+```
+
+```
+## [1] "50d 25H 2M 0S"
+```
+
+And of course, add them to dates. Compared to durations, periods are more likely to do what you expect:
+
+
+```r
+# A leap year
+ymd("2016-01-01") + dyears(1)
+```
+
+```
+## [1] "2016-12-31"
+```
+
+```r
+ymd("2016-01-01") + years(1)
+```
+
+```
+## [1] "2017-01-01"
+```
+
+```r
+# Daylight Savings Time
+one_pm + ddays(1)
+```
+
+```
+## [1] "2016-03-13 14:00:00 EDT"
+```
+
+```r
+one_pm + days(1)
+```
+
+```
+## [1] "2016-03-13 13:00:00 EDT"
+```
+
+Let's use periods to fix an oddity related to our flight dates. Some planes appear to have arrived at their destination _before_ they departed from New York City.
+
+
+```r
+flights_dt %&gt;% 
+  filter(arr_time &lt; dep_time) 
+```
+
+```
+## [38;5;246m# A tibble: 10,633 x 9[39m
+##    origin dest  dep_delay arr_delay dep_time            sched_dep_time     
+##    [3m[38;5;246m&lt;chr&gt;[39m[23m  [3m[38;5;246m&lt;chr&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m     [3m[38;5;246m&lt;dbl&gt;[39m[23m [3m[38;5;246m&lt;dttm&gt;[39m[23m              [3m[38;5;246m&lt;dttm&gt;[39m[23m             
+## [38;5;250m 1[39m EWR    BQN           9        -[31m4[39m 2013-01-01 [38;5;246m19:29:00[39m 2013-01-01 [38;5;246m19:20:00[39m
+## [38;5;250m 2[39m JFK    DFW          59        [31mNA[39m 2013-01-01 [38;5;246m19:39:00[39m 2013-01-01 [38;5;246m18:40:00[39m
+## [38;5;250m 3[39m EWR    TPA          -[31m2[39m         9 2013-01-01 [38;5;246m20:58:00[39m 2013-01-01 [38;5;246m21:00:00[39m
+## [38;5;250m 4[39m EWR    SJU          -[31m6[39m       -[31m12[39m 2013-01-01 [38;5;246m21:02:00[39m 2013-01-01 [38;5;246m21:08:00[39m
+## [38;5;250m 5[39m EWR    SFO          11       -[31m14[39m 2013-01-01 [38;5;246m21:08:00[39m 2013-01-01 [38;5;246m20:57:00[39m
+## [38;5;250m 6[39m LGA    FLL         -[31m10[39m        -[31m2[39m 2013-01-01 [38;5;246m21:20:00[39m 2013-01-01 [38;5;246m21:30:00[39m
+## [38;5;250m 7[39m EWR    MCO          41        43 2013-01-01 [38;5;246m21:21:00[39m 2013-01-01 [38;5;246m20:40:00[39m
+## [38;5;250m 8[39m JFK    LAX          -[31m7[39m       -[31m24[39m 2013-01-01 [38;5;246m21:28:00[39m 2013-01-01 [38;5;246m21:35:00[39m
+## [38;5;250m 9[39m EWR    FLL          49        28 2013-01-01 [38;5;246m21:34:00[39m 2013-01-01 [38;5;246m20:45:00[39m
+## [38;5;250m10[39m EWR    FLL          -[31m9[39m       -[31m14[39m 2013-01-01 [38;5;246m21:36:00[39m 2013-01-01 [38;5;246m21:45:00[39m
+## [38;5;246m# … with 10,623 more rows, and 3 more variables: arr_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m,
+## #   sched_arr_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m, air_time [3m[38;5;246m&lt;dbl&gt;[38;5;246m[23m[39m
+```
+
+These are overnight flights. We used the same date information for both the departure and the arrival times, but these flights arrived on the following day. We can fix this by adding `days(1)` to the arrival time of each overnight flight.
+
+
+```r
+flights_dt &lt;- flights_dt %&gt;% 
+  mutate(
+    overnight = arr_time &lt; dep_time,
+    arr_time = arr_time + days(overnight * 1),
+    sched_arr_time = sched_arr_time + days(overnight * 1)
+  )
+```
+
+Now all of our flights obey the laws of physics.
+
+
+```r
+flights_dt %&gt;% 
+  filter(overnight, arr_time &lt; dep_time) 
+```
+
+```
+## [38;5;246m# A tibble: 0 x 10[39m
+## [38;5;246m# … with 10 variables: origin [3m[38;5;246m&lt;chr&gt;[38;5;246m[23m, dest [3m[38;5;246m&lt;chr&gt;[38;5;246m[23m, dep_delay [3m[38;5;246m&lt;dbl&gt;[38;5;246m[23m,
+## #   arr_delay [3m[38;5;246m&lt;dbl&gt;[38;5;246m[23m, dep_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m, sched_dep_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m,
+## #   arr_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m, sched_arr_time [3m[38;5;246m&lt;dttm&gt;[38;5;246m[23m, air_time [3m[38;5;246m&lt;dbl&gt;[38;5;246m[23m,
+## #   overnight [3m[38;5;246m&lt;lgl&gt;[38;5;246m[23m[39m
+```
+
+---
+
+# Intervals
+
+It's obvious what `dyears(1) / ddays(365)` should return: one, because durations are always represented by a number of seconds, and a duration of a year is defined as 365 days worth of seconds.
+
+What should `years(1) / days(1)` return? Well, if the year was 2015 it should return 365, but if it was 2016, it should return 366! There's not quite enough information for lubridate to give a single clear answer. What it does instead is give an estimate, with a warning:
+
+
+```r
+years(1) / days(1)
+```
+
+```
+## estimate only: convert to intervals for accuracy
+```
+
+```
+## [1] 365.25
+```
+
+If you want a more accurate measurement, you'll have to use an __interval__. An interval is a duration with a starting point: that makes it precise so you can determine exactly how long it is:
+
+
+```r
+next_year &lt;- today() + years(1)
+(today() %--% next_year) / ddays(1)
+```
+
+```
+## [1] 366
+```
+
+To find out how many periods fall into an interval, you need to use integer division:
+
+
+```r
+(today() %--% next_year) %/% days(1)
+```
+
+```
+## Note: method with signature 'Timespan#Timespan' chosen for function '%/%',
+##  target signature 'Interval#Period'.
+##  "Interval#ANY", "ANY#Period" would also be valid
+```
+
+```
+## [1] 366
+```
+
+---
+
+# Exercises
+
+1.  Why is there `months()` but no `dmonths()`?
+
+1.  Explain `days(overnight * 1)` to someone who has just started 
+    learning R. How does it work?
+
+1.  Create a vector of dates giving the first day of every month in 2015.
+    Create a vector of dates giving the first day of every month
+    in the _current_ year.
+
+1.  Write a function that given your birthday (as a date), returns 
+    how old you are in years.
+
+1.  Why can't `(today() %--% (today() + years(1)) / months(1)` work?
+
+---
+
+## Time zones 
+
+The first challenge is that everyday names of time zones tend to be ambiguous. For example, if you're American you're probably familiar with EST, or Eastern Standard Time. However, both Australia and Canada also have EST! To avoid confusion, R uses the international standard IANA time zones. These use a consistent naming scheme "&lt;area&gt;/&lt;location&gt;", typically in the form "\&lt;continent\&gt;/\&lt;city\&gt;" (there are a few exceptions because not every country lies on a continent). Examples include "America/New_York", "Europe/Paris", and "Pacific/Auckland".
+
+You might wonder why the time zone uses a city, when typically you think of time zones as associated with a country or region within a country. This is because the IANA database has to record decades worth of time zone rules. In the course of decades, countries change names (or break apart) fairly frequently, but city names tend to stay the same. Another problem is that name needs to reflect not only to the current behaviour, but also the complete history. For example, there are time zones for both "America/New_York" and "America/Detroit". These cities both currently use Eastern Standard Time but in 1969-1972 Michigan (the state in which Detroit is located), did not follow DST, so it needs a different name. It's worth reading the raw time zone database (available at &lt;http://www.iana.org/time-zones&gt;) just to read some of these stories!
+
+You can find out what R thinks your current time zone is with `Sys.timezone()`:
+
+
+```r
+Sys.timezone()
+```
+
+```
+## [1] "Europe/London"
+```
+
+(If R doesn't know, you'll get an `NA`.)
+
+And see the complete list of all time zone names with `OlsonNames()`:
+
+
+```r
+length(OlsonNames())
+```
+
+```
+## [1] 607
+```
+
+```r
+head(OlsonNames())
+```
+
+```
+## [1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"
+## [4] "Africa/Algiers"     "Africa/Asmara"      "Africa/Asmera"
+```
+
+In R, the time zone is an attribute of the date-time that only controls printing. For example, these three objects represent the same instant in time:
+
+
+```r
+(x1 &lt;- ymd_hms("2015-06-01 12:00:00", tz = "America/New_York"))
+```
+
+```
+## [1] "2015-06-01 12:00:00 EDT"
+```
+
+```r
+(x2 &lt;- ymd_hms("2015-06-01 18:00:00", tz = "Europe/Copenhagen"))
+```
+
+```
+## [1] "2015-06-01 18:00:00 CEST"
+```
+
+```r
+(x3 &lt;- ymd_hms("2015-06-02 04:00:00", tz = "Pacific/Auckland"))
+```
+
+```
+## [1] "2015-06-02 04:00:00 NZST"
+```
+
+You can verify that they're the same time using subtraction:
+
+
+```r
+x1 - x2
+```
+
+```
+## Time difference of 0 secs
+```
+
+```r
+x1 - x3
+```
+
+```
+## Time difference of 0 secs
+```
+
+Unless otherwise specified, lubridate always uses UTC. UTC (Coordinated Universal Time) is the standard time zone used by the scientific community and roughly equivalent to its predecessor GMT (Greenwich Mean Time). It does not have DST, which makes a convenient representation for computation. Operations that combine date-times, like `c()`, will often drop the time zone. In that case, the date-times will display in your local time zone:
+
+
+```r
+x4 &lt;- c(x1, x2, x3)
+x4
+```
+
+```
+## [1] "2015-06-01 12:00:00 EDT" "2015-06-01 12:00:00 EDT"
+## [3] "2015-06-01 12:00:00 EDT"
+```
+
+You can change the time zone in two ways:
+
+*   Keep the instant in time the same, and change how it's displayed.
+    Use this when the instant is correct, but you want a more natural
+    display.
+  
+    
+    ```r
+    x4a &lt;- with_tz(x4, tzone = "Australia/Lord_Howe")
+    x4a
+    ```
+    
+    ```
+    ## [1] "2015-06-02 02:30:00 +1030" "2015-06-02 02:30:00 +1030"
+    ## [3] "2015-06-02 02:30:00 +1030"
+    ```
+    
+    ```r
+    x4a - x4
+    ```
+    
+    ```
+    ## Time differences in secs
+    ## [1] 0 0 0
+    ```
+    
+    (This also illustrates another challenge of times zones: they're not
+    all integer hour offsets!)
+
+*   Change the underlying instant in time. Use this when you have an
+    instant that has been labelled with the incorrect time zone, and you
+    need to fix it.
+
+    
+    ```r
+    x4b &lt;- force_tz(x4, tzone = "Australia/Lord_Howe")
+    x4b
+    ```
+    
+    ```
+    ## [1] "2015-06-01 12:00:00 +1030" "2015-06-01 12:00:00 +1030"
+    ## [3] "2015-06-01 12:00:00 +1030"
+    ```
+    
+    ```r
+    x4b - x4
+    ```
+    
+    ```
+    ## Time differences in hours
+    ## [1] -14.5 -14.5 -14.5
+    ```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,5 +1,8 @@
-# meetup-presentations_lancaster
+# Links to presentations
 
+## 2019-11-06 Time and dates
+
+* [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-11-06-lubridate/lubridate.html)
 
 ## 2019-10-02 Strings
 
@@ -8,7 +11,6 @@
 ## 2019-09-04 Tidy Data
 
 * [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-09-04-tidy-data/tidy-data.html)
-* [R for Data Science book](https://r4ds.had.co.nz/) (Chapter 12)
 
 ## 2019-07-03 Pretty Graphics
 
@@ -17,8 +19,6 @@
 ## 2019-06-05 Data Transformation
 
 * [Slides](https://rladies.github.io/meetup-presentations_lancaster/2019-06-05-data-transformation/data-transformation.html)
-* [R for Data Science book](https://r4ds.had.co.nz/)
-* [Solutions to excercises](https://jrnold.github.io/r4ds-exercise-solutions/transform.html)
 
 ## 2019-05-01: Launch event
 
