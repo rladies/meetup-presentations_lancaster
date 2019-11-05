@@ -39,16 +39,18 @@ knitr::include_graphics("images/h20-logo")
 
 ---
 
-# Libraries
+# Libraries and Datasets
 
 ```{r libraries, message = FALSE}
 library(tidyverse)
 library(lubridate)
 library(nycflights13)
+horror_movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")
 ```
 
 * **lubridate** is not part of core **tidyverse**
 * **nycflights13** has practice data.
+* **horror_movies** dataset comes from a previous Tidy Tuesday.
 
 ---
 
@@ -127,6 +129,42 @@ ymd(20170131, tz = "UTC")
 
 ---
 
+# Exercises
+
+1.  What happens if you parse a string that contains invalid dates?
+```{r, eval = FALSE}
+
+    ymd(c("2010-10-10", "bananas"))
+```
+
+1.  What does the `tzone` argument to `today()` do? Why is it important?
+
+1.  Use the appropriate lubridate function to parse each of the following dates:
+
+```{r}
+    d1 <- "January 1, 2010"
+    d2 <- "2015-Mar-07"
+    d3 <- "06-Jun-2017"
+    d4 <- c("August 19 (2015)", "July 1 (2015)")
+    d5 <- "12/30/14" # Dec 30, 2014
+```
+---
+
+# From existing date columns
+
+Sometimes existing data you have will have dates in a character string, and you can use the functions mentioned above to convert the whole column into a date.  Note that any values which cannot be converted will instead become NA values.
+
+```{r}
+head(horror_movies)
+
+horror_movies_formatted <- horror_movies %>%
+  mutate(release_date = dmy(release_date))
+
+head(horror_movies_formatted)
+  
+```
+
+
 # From individual components
 
 Instead of a single string, sometimes you'll have the individual components of the date-time spread across multiple columns. This is what we have in the flights data:
@@ -151,100 +189,9 @@ flights %>%
   head() %>% DT::datatable()
 ```
 
----
-
-# `make_datetime()`
-
-Let's do the same thing for each of the four time columns in `flights`. The times are represented in a slightly odd format, so we use modulus arithmetic to pull out the hour and minute components. Once I've created the date-time variables, I focus in on the variables we'll explore in the rest of the chapter.
-
-```{r}
-make_datetime_100 <- function(year, month, day, time) {
-  make_datetime(year, month, day, time %/% 100, time %% 100)
-}
-
-flights_dt <- flights %>% 
-  filter(!is.na(dep_time), !is.na(arr_time)) %>% 
-  mutate(
-    dep_time = make_datetime_100(year, month, day, dep_time),
-    arr_time = make_datetime_100(year, month, day, arr_time),
-    sched_dep_time = make_datetime_100(year, month, day, sched_dep_time),
-    sched_arr_time = make_datetime_100(year, month, day, sched_arr_time)
-  ) %>% 
-  select(origin, dest, ends_with("delay"), ends_with("time"))
-```
-
-```{r, echo = FALSE}
-flights_dt %>%
-  head() %>%
-  DT::datatable()
-```
-
----
-# Plotting departure times
-
-With this data, I can visualise the distribution of departure times across the year:
-
-```{r}
-flights_dt %>% 
-  ggplot(aes(dep_time)) + 
-  geom_freqpoly(binwidth = 86400) # 86400 seconds = 1 day
-```
-
-Or within a single day:
-
-```{r}
-flights_dt %>% 
-  filter(dep_time < ymd(20130102)) %>% 
-  ggplot(aes(dep_time)) + 
-  geom_freqpoly(binwidth = 600) # 600 s = 10 minutes
-```
-
-Note that when you use date-times in a numeric context (like in a histogram), 1 means 1 second, so a binwidth of 86400 means one day. For dates, 1 means 1 day.
-
----
-
-# From other types
-
-You may want to switch between a date-time and a date. That's the job of `as_datetime()` and `as_date()`:
-
-```{r}
-as_datetime(today())
-as_date(now())
-```
-
-Sometimes you'll get date/times as numeric offsets from the "Unix Epoch", 1970-01-01. If the offset is in seconds, use `as_datetime()`; if it's in days, use `as_date()`.
-
-```{r}
-as_datetime(60 * 60 * 10)
-as_date(365 * 10 + 2)
-```
-
----
-
-# Exercises
-
-1.  What happens if you parse a string that contains invalid dates?
-    ```{r, eval = FALSE}
-    ymd(c("2010-10-10", "bananas"))
-    ```
-    
-1.  What does the `tzone` argument to `today()` do? Why is it important?
-
-1.  Use the appropriate lubridate function to parse each of the following dates:
-
-```{r}
-    d1 <- "January 1, 2010"
-    d2 <- "2015-Mar-07"
-    d3 <- "06-Jun-2017"
-    d4 <- c("August 19 (2015)", "July 1 (2015)")
-    d5 <- "12/30/14" # Dec 30, 2014
-```
-
----
-
 # Extracting components
 
-You can pull out individual parts of the date withthe following functions
+You can pull out individual parts of the date with the following functions
 * `year()`
 * `month()`
 * `mday()` (day of the month)
@@ -267,52 +214,19 @@ wday(datetime)
 
 For `month()` and `wday()` you can set `label = TRUE` to return the abbreviated name of the month or day of the week. Set `abbr = FALSE` to return the full name.
 
+
 ```{r}
 month(datetime, label = TRUE)
 wday(datetime, label = TRUE, abbr = FALSE)
 ```
 
-We can use `wday()` to see that more flights depart during the week than on the weekend:
+We can use `wday()` to see that most of the horror movies were released on a Friday than any other days:
 
 ```{r}
-flights_dt %>% 
-  mutate(wday = wday(dep_time, label = TRUE)) %>% 
+horror_movies_formatted %>%
+  mutate(wday = wday(release_date, label = TRUE)) %>% 
   ggplot(aes(x = wday)) +
     geom_bar()
-```
-
-There's an interesting pattern if we look at the average departure delay by minute within the hour. It looks like flights leaving in minutes 20-30 and 50-60 have much lower delays than the rest of the hour!
-
-```{r}
-flights_dt %>% 
-  mutate(minute = minute(dep_time)) %>% 
-  group_by(minute) %>% 
-  summarise(
-    avg_delay = mean(arr_delay, na.rm = TRUE),
-    n = n()) %>% 
-  ggplot(aes(minute, avg_delay)) +
-    geom_line()
-```
-
-Interestingly, if we look at the _scheduled_ departure time we don't see such a strong pattern:
-
-```{r}
-sched_dep <- flights_dt %>% 
-  mutate(minute = minute(sched_dep_time)) %>% 
-  group_by(minute) %>% 
-  summarise(
-    avg_delay = mean(arr_delay, na.rm = TRUE),
-    n = n())
-
-ggplot(sched_dep, aes(minute, avg_delay)) +
-  geom_line()
-```
-
-So why do we see that pattern with the actual departure times? Well, like much data collected by humans, there's a strong bias towards flights leaving at "nice" departure times. Always be alert for this sort of pattern whenever you work with data that involves human judgement!
-
-```{r}
-ggplot(sched_dep, aes(minute, n)) +
-  geom_line()
 ```
 
 ---
@@ -325,15 +239,37 @@ Sometime we want to round the date to the nearest unit of time.
 * `round_date()`
 * `ceiling_date()`
 
-Say we want to plot the number of flights per week:
+Say we want to plot the number of movies per year:
 
 ```{r, fig.height=150}
-flights_dt %>% 
-  count(week = floor_date(dep_time, "week")) %>% 
-  ggplot(aes(week, n)) + geom_line()
+horror_movies_formatted %>% 
+  count(year = floor_date(release_date, "year")) %>% 
+  ggplot(aes(year, n)) + geom_line()
 ```
 
 ---
+
+# Exercises
+
+1. Which is the most popular month for horror movies to be released?
+
+```{r}
+horror_movies_formatted %>% 
+  count(month = month(release_date, label = TRUE)) %>% 
+  ggplot(aes(month, n)) + geom_bar(stat="identity")
+```
+
+2. Using `dplyr::filter`, `dplyr::count`, and `lubridate::floor_date`, work out which month in 2016 has the second highest number of horror films released.
+```{r}
+horror_movies_formatted %>% 
+  filter(year(release_date) == 2016) %>%
+  count(month = floor_date(release_date, "month")) %>% 
+  ggplot(aes(month, n)) + geom_line() +
+  scale_x_date(date_breaks = "month")
+```
+---
+
+
 
 # Setting components
 
