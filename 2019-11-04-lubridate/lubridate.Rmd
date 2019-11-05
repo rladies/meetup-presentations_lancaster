@@ -1,0 +1,323 @@
+---
+title: "Dates and times with lubridate `r emo::ji('calendar')`"
+subtitle: ""
+author: "([\\@RLadiesLancs](https://twitter.com/RLadiesLancs))"
+date: "2019-11-04"
+output:
+  xaringan::moon_reader:
+    css: ["default", "rladies", "rladies-fonts", "rladies-lancaster.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+layout: true
+
+<div class = "rladies-header">
+<span class="social"><table><tr><td><img src="images/twitter.gif"/></td><td> @RLadiesLancs</td></tr></table></span>
+</div>
+
+```{r setup, echo = FALSE}
+library("emo")
+```
+
+---
+
+# Tonight - **lubridate** package `r emo::ji("clock")`
+
+### Slides `r emo::ji("teacher")`     [github.com/rladies](https://github.com/rladies/)
+
+### Book chapter `r emo::ji("book")`     [r4ds.had.co.nz](https://r4ds.had.co.nz/dates-and-times.html)
+
+### Slack `r emo::ji("speech")`     [bit.ly/R4DSslack](https://bit.ly/R4DSslack )
+
+# Thanks to our sponsors `r emo::ji("pretzel")`
+```{r, out.width = "160px", fig.align='center', echo = FALSE}
+knitr::include_graphics("images/h20-logo")
+```
+
+---
+
+# Libraries and Datasets
+
+```{r libraries, message = FALSE}
+library(tidyverse)
+library(lubridate)
+library(nycflights13)
+horror_movies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-22/horror_movies.csv")
+```
+
+* **lubridate** is not part of core **tidyverse**
+* **nycflights13** has practice data. `r emo::ji("airplane")`
+* **horror_movies** dataset comes from a previous #TidyTuesday. `r emo::ji("ghost")`
+
+---
+
+# Dates times
+
+  * Time is a measurement system
+  
+  * Unfortunately, it's messy
+  
+    * How long is a month?
+  
+    * If I say in one years time, do I mean in 365.25 days?
+    
+    * Leap seconds??
+
+---
+
+# Let's laugh at other software & tell horror stories
+
+  * Excel cannot display dates before the year 1900
+
+
+  * Excel thinks 1900 is a leap year
+
+  
+  * SAS does not recognise the year 4000 as a leap year
+  
+---
+
+# Creating dates
+
+To get the current date or date-time you can use `today()` or `now()`:
+
+```{r}
+today()
+now()
+```
+
+Otherwise, there are two ways you're likely to create a date/time:
+
+* From a string.
+* From individual date-time components.
+
+---
+
+# Creating dates from strings
+
+* Date/time data often comes as strings. 
+* Helpers provided by lubridate. 
+* Automatically work out the format once you specify the order of the component. 
+
+```{r}
+ymd("2017-01-31")
+mdy("January 31st, 2017")
+dmy("31-Jan-2017")
+```
+
+---
+
+# Creating date-times from strings
+
+`ymd()` and friends create dates. To create a date-time, add an underscore and one or more of "h", "m", and "s" to the name of the parsing function:
+
+```{r}
+ymd_hms("2017-01-31 20:11:59")
+mdy_hm("01/31/2017 08:01")
+```
+
+You can also force the creation of a date-time from a date by supplying a timezone:
+
+```{r}
+ymd(20170131, tz = "UTC")
+```
+
+---
+
+# Exercises
+
+1.  What happens if you parse a string that contains invalid dates?
+    ```{r, eval = FALSE}
+
+    ymd(c("2010-10-10", "bananas"))
+    ```
+
+2.  Use the appropriate **lubridate** function to parse each of the following dates:
+
+```{r}
+    d1 <- "January 1, 2010"
+    d2 <- "2015-Mar-07"
+    d3 <- "06-Jun-2017"
+    d4 <- "29/02/2001"
+    d5 <- c("August 19 (2015)", "July 1 (2015)")
+    d6 <- "12/30/14" # Dec 30, 2014
+```
+
+---
+
+# From existing date columns
+
+* You can use the functions above to convert the whole column into a date.
+* Any values which cannot be converted will instead become NA values.
+
+```{r, echo = FALSE}
+horror_movies %>%
+  slice(1:5) %>%
+  select(title:release_country) %>%
+DT::datatable()
+```
+
+---
+
+# From existing date columns
+
+```{r horror_formatted}
+horror_movies_formatted <- horror_movies %>%
+  mutate(release_date = dmy(release_date))
+```
+
+```{r, echo = FALSE}
+horror_movies_formatted %>%
+  slice(1:5) %>%
+  select(title:release_country) %>%
+DT::datatable()
+```
+
+
+---
+
+# From individual components
+
+* Sometimes you'll have the individual components across multiple columns.
+* This is what we have in the flights data:
+
+```{r, echo = FALSE}
+flights %>% 
+  select(year, month, day, hour, minute)  %>%
+  head() %>%
+  DT::datatable()
+```
+
+---
+
+#  From individual components
+
+Use `make_date()` for dates, or `make_datetime()` for date-times:
+
+```{r, eval = FALSE}
+flights %>% 
+  mutate(date = make_date(year, month, day))
+```
+
+```{r, echo = FALSE}
+flights %>% 
+  select(year, month, day, hour, minute) %>% 
+  mutate(date = make_date(year, month, day)) %>%
+  head() %>% DT::datatable()
+```
+
+
+
+---
+
+# Extracting components
+
+You can pull out individual parts of the date with the following functions
+* `year()`
+* `month()`
+* `mday()` (day of the month)
+* `yday()` (day of the year)
+* `wday()` (day of the week)
+* `hour()`
+* `minute()`
+* `second()`
+
+---
+
+# Extracting components
+
+```{r}
+datetime <- ymd_hms("2016-07-08 12:34:56")
+
+year(datetime)
+month(datetime)
+mday(datetime)
+
+yday(datetime)
+wday(datetime)
+```
+
+
+---
+
+# Extracting components
+
+* For `month()` and `wday()` you can set `label = TRUE` to return name 
+
+* Set `abbr = FALSE` to return the full name.
+
+
+```{r}
+month(datetime, label = TRUE)
+wday(datetime, label = TRUE, abbr = FALSE)
+```
+
+---
+
+# Which day are horror movies released?
+
+We can use `wday()` to see that most of the horror movies were released on a Friday than any other days:
+
+```{r, fig.height = 4}
+horror_movies_formatted %>%
+  mutate(wday = wday(release_date, label = TRUE)) %>% 
+  ggplot(aes(x = wday)) +
+    geom_bar()
+```
+
+---
+
+# Rounding
+
+Sometime we want to round the date to the nearest unit of time.
+
+- `round_date(d, unit)`
+
+- `floor_date(d, unit)`
+
+- `ceiling_date(d, unit)`
+
+In each of the above functions, `unit` should be one of `"second"`, `"minute"`, `"hour"`, `"day"`, `"week"`, `"month"`, or `"year"`.
+
+---
+
+# Rounding 
+
+Say we want to plot the number of movies per year:
+
+```{r, fig.height = 4, warning=FALSE}
+horror_movies_formatted %>% 
+  count(year = floor_date(release_date, "year")) %>% 
+  ggplot(aes(year, n)) + geom_line()
+```
+
+---
+
+# Exercises
+
+1. Store your birth date as a character variable i.e. `bday = "29/05/1990"`
+
+2. Convert it into a date object using  `dmy()`
+
+3. Which day of the week were you born on? Hint: Use `wday()`. Notice R returns the weekday as a number. To clarify this, set the argument `label` equal to `TRUE` inside `wday`. 
+
+4. Which is the most popular month for horror movies to be released?
+
+5. Using `dplyr::filter`, `dplyr::count`, and `lubridate::floor_date`, work out which month in 2016 has the second highest number of horror films released.
+
+    ```{r, include=FALSE}
+    horror_movies_formatted %>% 
+    count(month = month(release_date, label = TRUE)) %>% 
+    ggplot(aes(month, n)) + geom_bar(stat="identity")
+    ```
+
+```{r,  include=FALSE}
+horror_movies_formatted %>% 
+  filter(year(release_date) == 2016) %>%
+  count(month = floor_date(release_date, "month")) %>% 
+  ggplot(aes(month, n)) + geom_line() +
+  scale_x_date(date_breaks = "month")
+```
