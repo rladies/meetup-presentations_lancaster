@@ -1,0 +1,102 @@
+---
+title: "R Markdown and why I love it "
+author: "Rebecca Killick(r.killick@lancs.ac.uk)"
+date: "R-Ladies, Feb 20"
+output: 
+  #html_notebook:
+  beamer_presentation:
+  #  theme: lancaster
+  #  includes:
+  #    in_header: header.tex
+  #  keep_tex: true
+---
+
+# Outline
+
+* What is Rmarkdown?
+* Rmarkdown in RStudio
+  * Rendering to different formats
+  * Code Chunks
+* Short Tutorial
+* Advanced features
+
+# What is Rmarkdown?
+
+\begin{columns}
+  \column{0.5\textwidth}
+  \begin{itemize}
+    \item Plain text file with extension .Rmd
+    \item Reproducible record of your work
+    \item Keeps code and report in a single place
+    \item[]
+    \item Documents: HTML, PDF, Word
+    \item Slides: HTML, Beamer Powerpoint
+    \item Other: dashboards, books, websites, shiny documents
+  \end{itemize}
+  
+  \column{0.5\textwidth}
+  \includegraphics[width=0.95\textwidth]{Plots/rmarkdown_workflow.png}
+\end{columns}
+
+# Rmarkdown in RStudio
+
+* YAML Header
+    * Instructions for how to build the document
+* Text
+    * Can include parameters from the code
+* Code chunks
+    * Raw code (R/C/Python) that is run and the output stored/returned
+    * three back ticks for starting code chunks, single for inline
+        * next to the 1 key! 
+    
+
+* Uses markdown syntax but can include direct latex / html if rendering to those formats
+
+# Live action Interlude
+
+\begin{center}
+\includegraphics[height=0.8\textheight]{Plots/hex-rmarkdown.png}
+\end{center}
+
+# Short tutorial
+
+1. Create and build the template Rmarkdown document.
+2. Change the output to HTML, PDF, Word and view them.
+3. Add a code chunk to draw a histogram of the speed variable from the *cars* object - don't include the code.
+4. Add some text which displays the mean of the speed variable in the middle of a sentence.
+    Remember single back ticks for inline.
+
+Presentation:
+
+1. Create a presentation (format is your choice)
+2. Include the histogram of the speed variable as a whole slide graphic
+3. Add the average speed as a bullet point at the top of the histogram.
+
+# Advanced Features
+
+* Latex headers
+* Hacking slide templates (such as this one)
+* Journal article templates \url{https://github.com/rstudio/rticles}
+* Dashboards and interactive documents (shiny)
+* Whole websites and books
+
+My latex lifesaver:
+
+    includes:
+      in_header: header.tex
+      keep_tex: true
+
+
+# Useful resources
+
+RStudio site: \url{https://rmarkdown.rstudio.com/}
+
+Cheatsheet: \url{https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf}
+
+Reference Sheet: \url{https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf}
+
+Rmarkdown book: \url{https://bookdown.org/yihui/rmarkdown/}
+
+Markdown basics: \url{https://rmarkdown.rstudio.com/authoring_basics.html}
+
+Hadley's R for data science Markdown chapter: \url{https://r4ds.had.co.nz/r-markdown.html}
