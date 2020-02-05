@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>rstudio::conf</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="(@RLadiesLancs)" />
+    <meta name="date" content="2020-02-05" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+    <script src="libs/jquery-1.12.4/jquery.min.js"></script>
+    <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding-0.9/datatables.js"></script>
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+    <link rel="stylesheet" href="rladies-lancaster.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# rstudio::conf
+## Stories from San Francisco 🌉
+### (<a href="https://twitter.com/trianglegirl">@RLadiesLancs</a>)
+### 2020-02-05
+
+---
+
+layout: true
+
+&lt;div class = "rladies-header"&gt;
+&lt;span class="social"&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;img src="images/twitter.gif"/&gt;&lt;/td&gt;&lt;td&gt; @RLadiesLancs&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+
+
+---
+
+
+# RStudio Conference 2020
+
+* In San Francisco
+* ~2400 attendees
+* Broad disciplines
+* 2 days workshops (materials online)
+* 2 days talks (videos online soon)
+* Lots of R-Ladies!
+
+
+&lt;img src="images/rladies_rstudioconf.jpeg" width="500px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Workshops
+
+* All material [available online](https://github.com/rstudio-conf-2020)
+
+
+* A Practical Introduction to Data Visualization with ggplot2 Workshop
+* Applied Machine Learning Workshop
+* Big Data with R Workshop
+* Building Tidy Tools Workshop
+* Deep Learning with Keras and TensorFlow in R Workshop
+* Designing the Data Science Classroom Workshop
+* Introduction to Data Science in the Tidyverse Workshop
+* Introduction to Machine Learning with the Tidyverse Workshop
+* JavaScript for Shiny Users Workshop
+* Modern Geospatial Data Analysis with R Workshop
+* My Organization's First R Package Workshop
+* R for Excel Users Workshop
+* R Markdown and Interactive Dashboards Workshop
+* RStudio Instructor Training Workshop (1-day)
+* RStudio Professional Products Administration Workshop
+* Shiny From Start To Finish Workshop
+* Text Mining with Tidy Data Principles Workshop
+* Tidy Time Series and Forecasting in R Workshop
+* What They Forgot to Teach You about R Workshop
+
+---
+
+# Tidy Time Series
+
+.pull-left[
+* Rob Hyndman 
+* Manipulating time series data
+* Forecasting
+* All in the tidyverse framework
+* Free book [FPP3](https://otexts.com/fpp3/)
+
+## R packages
+
+* tsibble
+* feasts
+* fable
+
+]
+.pull-right[
+![](images/rob.png)
+]
+
+---
+
+# What the flip is a tsibble?
+
+* A tsibble allows storage and manipulation of
+multiple time series in R.
+* It contains:
+    * An index: time information about the observation
+    * Measured variable(s): numbers of interest
+    * Key variable(s): optional unique identifiers for each
+series
+* It works with tidyverse functions.
+
+&lt;img src="images/tsibble.png" width="300px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Example
+
+<div id="htmlwidget-11c52ed52e2b900520af" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11c52ed52e2b900520af">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],["1998-01-01","1998-04-01","1998-07-01","1998-10-01","1999-01-01","1999-04-01","1999-07-01","1999-10-01","2000-01-01","2000-04-01","2000-07-01","2000-10-01","2001-01-01","2001-04-01","2001-07-01","2001-10-01","2002-01-01","2002-04-01","2002-07-01","2002-10-01"],["Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide","Adelaide"],["South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia","South Australia"],["Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business","Business"],[135.0776903,109.987316,166.0346866,127.1604643,137.4485333,199.9125861,169.3550898,134.3579372,154.034398,168.7763637,223.0651159,241.2206893,132.5000378,178.3980945,195.9963258,101.1746931,237.8327914,150.7266327,167.7128424,140.3395127]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Quarter<\/th>\n      <th>Region<\/th>\n      <th>State<\/th>\n      <th>Purpose<\/th>\n      <th>Trips<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":5},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+---
+
+# Quarterly Australian Beer Production
+
+
+```r
+beer &lt;- aus_production %&gt;%
+select(Quarter, Beer) %&gt;%
+filter(year(Quarter) &gt;= 1992)
+beer %&gt;% autoplot(Beer)
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-4-1.png" height="400px" /&gt;
+
+---
+
+# Quarterly Australian Beer Production
+
+
+```r
+beer %&gt;% gg_season(Beer, labels = "right")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-5-1.png" height="400px" /&gt;
+
+---
+
+# Multiple seasonal periods
+
+
+```r
+vic_elec %&gt;% gg_season(Demand)
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-6-1.png" height="400px" /&gt;
+
+---
+
+# Multiple seasonal periods
+
+
+```r
+vic_elec %&gt;% gg_season(Demand, period = "week")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-7-1.png" height="400px" /&gt;
+
+---
+
+# Multiple seasonal periods
+
+
+```r
+vic_elec %&gt;% gg_season(Demand, period = "day")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-8-1.png" height="400px" /&gt;
+---
+
+# Quarterly Australian Beer Production
+
+
+```r
+beer %&gt;% gg_subseries(Beer)
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-9-1.png" height="400px" /&gt;
+
+---
+
+# Australian holidays
+
+
+```r
+holidays &lt;- tourism %&gt;%
+filter(Purpose == "Holiday") %&gt;%
+group_by(State) %&gt;%
+summarise(Trips = sum(Trips))
+
+holidays %&gt;% autoplot(Trips) +
+ylab("thousands of trips") + xlab("Year") +
+ggtitle("Australian domestic holiday nights")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-10-1.png" height="400px" /&gt;
+---
+
+# Seasonal Plots
+
+
+```r
+holidays %&gt;% gg_season(Trips) +
+ylab("thousands of trips") +
+ggtitle("Australian domestic holiday nights")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-11-1.png" height="400px" /&gt;
+
+---
+# Seasonal subseries plots
+
+
+```r
+holidays %&gt;%
+gg_subseries(Trips) + ylab("thousands of trips") +
+ggtitle("Australian domestic holiday nights")
+```
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-12-1.png" height="400px" /&gt;
+
+---
+
+# Calendar Plots
+
+&lt;img src="rstudio_conf_files/figure-html/unnamed-chunk-13-1.png" height="400px" /&gt;
+
+---
+
+# RStudio becomes a PBC
+
+* Mission: Open source software for statistical computing
+* Started developing in 2008
+* Corporations are by-default not trustworthy 
+* Community needs to trust that our mission open-source software
+
+--
+
+## So far...
+
+* 250 open source projects
+* 36 full-time engineers dedicated to open source software (54%)
+* Hundreds of millions of downloads of open source products/packages
+
+
+&lt;img src="images/RStudio-Logo-Flat.png" width="500px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Styling Shiny apps with Sass and Bootstrap
+
+* Joe Cheng
+* Shiny apps can look a bit samey
+* Use SASS to style
+* Fancy interactive helper function
+
+
+&lt;img src="images/demo.gif" width="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Glamour of Graphics: Will Chase
+
+&lt;img src="images/glamour.jpg" width="300px" style="display: block; margin: auto;" /&gt;
+
+
+
+
+---
+
+# Glamour of Graphics: skip the labels
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;I so agree with this statement from &lt;a href="https://twitter.com/W_R_Chase?ref_src=twsrc%5Etfw"&gt;@W_R_Chase&lt;/a&gt;: you remove the need for axis labels with good titles. Applies to simpler plots, but I think label all axes all the time is too strict an advice. &lt;a href="https://twitter.com/hashtag/rstudioconf?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstudioconf&lt;/a&gt; &lt;a href="https://t.co/3LkJlLn00W"&gt;pic.twitter.com/3LkJlLn00W&lt;/a&gt;&lt;/p&gt;&amp;mdash; Mine CetinkayaRundel (@minebocek) &lt;a href="https://twitter.com/minebocek/status/1222952045327446016?ref_src=twsrc%5Etfw"&gt;January 30, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+
+# Glamour of Graphics: skip the legend
+
+
+&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Awesome tip from &lt;a href="https://twitter.com/W_R_Chase?ref_src=twsrc%5Etfw"&gt;@W_R_Chase&lt;/a&gt; on legends - see if you can skip them entirely by using color in your title &lt;a href="https://twitter.com/hashtag/rstudioconf?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rstudioconf&lt;/a&gt; &lt;a href="https://t.co/qg5OG1dPKt"&gt;pic.twitter.com/qg5OG1dPKt&lt;/a&gt;&lt;/p&gt;&amp;mdash; Emily Robinson (@robinson_es) &lt;a href="https://twitter.com/robinson_es/status/1222953128313544705?ref_src=twsrc%5Etfw"&gt;January 30, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+---
+# Teacup giraffes
+
+* Gentle introduction to statistics with R
+* Nice story telling
+* Really cute graphics
+* [Website](https://tinystats.github.io/teacups-giraffes-and-statistics/01_introToR.html)
+
+
+
+&lt;img src="images/giraffes.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+# Don’t Repeat Yourself, Talk To Yourself! 
+
+* Repeated Reporting In The R Universe
+* [Sharla Gelfand](https://twitter.com/sharlagelfand)
+* [Slides](https://sharstudioconf.netlify.com/#1)
+* Write "chatty functions" using the **usethis** package
+
+
+```r
+library("usethis")
+analysis_year &lt;- 2019
+ui_info("Hi")
+```
+
+```
+## ℹ Hi
+```
+
+```r
+ui_todo("Querying demographics data for {analysis_year}...")
+```
+
+```
+## ● Querying demographics data for 2019...
+```
+
+```r
+ui_done("Analysis complete")
+```
+
+```
+## ✔ Analysis complete
+```
+
+---
+
+# Object of type closure is not subsettable
+
+
+* [Jenny Bryan](https://twitter.com/jennybryan?lang=en)
+* [Slides](https://speakerdeck.com/jennybc/object-of-type-closure-is-not-subsettable)
+
+* Reset
+* Reprex
+* Debug
+* Deter
+&lt;img src="images/repex.jpg" width="100px" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Sewing a tidy dress
+
+&lt;img src="images/amelia.jpg" width="500px" style="display: block; margin: auto;" /&gt;
+
+* [GitHub](https://github.com/ameliamn/hexfabric)
+* [Blog Post](https://www.amelia.mn/blog/misc/2019/08/17/Tidy-Dress.html)
+
+
+---
+
+# Live podcast
+
+
+* [Live episode](http://nssdeviations.com/100-live-from-rstudio-conf-2020)
+
+&lt;img src="images/podcast.jpeg" width="600px" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
