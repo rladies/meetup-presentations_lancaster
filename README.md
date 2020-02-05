@@ -3,7 +3,7 @@
 ## 2020-02-05 RMarkdown and RStudio Conf
 
 - [RMarkdown and why I love it](https://rladies.github.io/meetup-presentations_lancaster/2020-02-05-rmarkdown/Rmarkdown/Killick.pdf)
-- [RStudio::conf]()
+- [RStudio::conf](https://rladies.github.io/meetup-presentations_lancaster/2020-02-05-rmarkdown/rstudio_conf/rstudio_conf.html#1)
 
 ## 2019-11-06 Time and dates
 
