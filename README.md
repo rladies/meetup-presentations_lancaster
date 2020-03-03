@@ -1,6 +1,6 @@
 # Links to presentations
 
-## 2020-03-04 Introduction to Shint
+## 2020-03-04 Introduction to Shiny
 
 - [Slides and practicals](https://github.com/rstudio-education/shiny.rstudio.com-tutorial)
 
