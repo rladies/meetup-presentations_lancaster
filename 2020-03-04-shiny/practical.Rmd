@@ -1,0 +1,126 @@
+---
+title: "Shiny practical"
+author: "Rhian Davies"
+date: "04/03/2020"
+output: html_document
+---
+
+
+## The data
+
+We're going to work with the IMDB movies data. 
+It lives in the ggplotmovies package. You can install the package by running:
+
+```{r, eval = FALSE}
+install.packages("ggplot2movies")
+```
+
+To load the dataset into your R session, run the following command
+
+```{r, eval = FALSE}
+data("movies", package = "ggplot2movies")
+```
+
+You should now have an object called `movies` in your environment. 
+Have a look at it.
+
+For our first shiny app, we are going to make a simple shiny app which allows the user to choose what colour the points in a scatter plot are going to be.
+
+## Input
+
+The input will be a simple radio button, with a three colours to choose from. 
+
+Look at the [widget gallery](https://shiny.rstudio.com/gallery/widget-gallery.html), which widget do you need?
+
+Look at the code on the widget page, and adapt it to create a drop down menu with three different colour options. To see a full list of all of R's inbuilt colours, run `colors()`.
+
+```{r, eval = FALSE}
+  radioButtons("colour", label = h3("Choose a colour"),
+    choices = list("Purple" = "purple", "Fire Brick" = "firebrick2", "Maroon" = "maroon4") ,
+    selected = 1)
+```
+
+## Output 
+
+For our output plot we'll create a plot showing the relationship between movie length and movie budget. 
+
+Create a scatter plot in ggplot2 with length on the x axis and rating on the y axis. 
+
+There is one movie which is **ridiculously** long, so I suggest you run `filter(length < 300)` before you plot to exclude that outlier.
+
+```{r, eval = FALSE}
+movies %>%
+  filter(length < 300) %>%
+  ggplot(aes(x = length, y = rating)) + 
+  geom_point(col = "purple")
+```
+
+## Putting it all together
+
+Now we're going to put it all together. Copy the code below, and paste it into a file called `app.R`.
+
+```{rapp, eval = FALSE}
+library(shiny)
+library(tidyverse)
+
+ui <- fluidPage()
+
+server <- function(input, output) {}
+
+shinyApp(ui = ui, server = server)
+```
+
+### The server
+
+Let's start with the server and recap the 3 rules for working the server.
+
+* Save objects to display to output$
+* Build objects to display with render*()
+* Access input values with input$
+
+Your server function should therefore look something like this.
+
+```{r server, eval = FALSE}
+server <- function(input, output) {
+  library(ggplot2)
+  
+  #Load the data
+  data("movies", package = "ggplot2movies")
+  
+  # Create the scatter and save to output$
+  output$scatterplot = renderPlot({
+    movies %>%
+      filter(length < 300) %>%
+      ggplot(aes(x = length, y = rating)) + 
+      geom_point(col = input$colour)
+  })
+}
+```
+
+### The UI
+
+* Copy the code for the radio buttons into the `fluidPage()`
+* Copy the code to show he output plot into `fluidPage()` and separate the two lines with a comma. 
+* Remember all we need is `plotOutput("scatterplot")`
+
+Your code for your UI should look something like this:
+
+```{r UI, eval = FALSE}
+ui <- fluidPage(radioButtons("colour", label = h3("Choose a colour"),
+                             choices = list("Purple" = "purple",
+                                            "Fire Brick" = "firebrick2",
+                                            "Maroon" = "maroon4") ,
+                             selected = "purple"),
+                plotOutput("scatterplot")
+)
+```
+
+Run your shiny app. Remember you need to press the STOP button if you want to start using R again. 
+
+## Further questions
+
+1. Add a text box input which allows the user type in a title for the plot. Notice that the title updates letter-by-letter. Why is that?
+
+1. Add an input select box which allows the user to select a particular mpaa classification for the movies (R, NC-17, PG, PG-13). When the user selects a classification, the ggplot should show only the movies with that classification.
+
+1. Add a slider range input that allows the user to select the years that the films should be shown from.
