@@ -2,7 +2,8 @@
 
 ## 2020-03-04 Introduction to Shiny
 
-- [Slides and practicals](https://github.com/rstudio-education/shiny.rstudio.com-tutorial)
+- [Slides](https://github.com/rstudio-education/shiny.rstudio.com-tutorial)
+- [Practical]()
 
 ## 2020-02-05 RMarkdown and RStudio Conf
 
