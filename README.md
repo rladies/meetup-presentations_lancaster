@@ -1,5 +1,9 @@
 # Links to presentations
 
+## 2020-03-04 Introduction to Shint
+
+- [Slides and practicals](https://github.com/rstudio-education/shiny.rstudio.com-tutorial)
+
 ## 2020-02-05 RMarkdown and RStudio Conf
 
 - [RMarkdown and why I love it](https://rladies.github.io/meetup-presentations_lancaster/2020-02-05-rmarkdown/Rmarkdown/Killick.pdf)
