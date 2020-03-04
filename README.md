@@ -4,6 +4,7 @@
 
 - [Slides](https://github.com/rstudio-education/shiny.rstudio.com-tutorial)
 - [Practical](https://rladies.github.io/meetup-presentations_lancaster/2020-03-04-shiny/practical.html)
+- [Solutions](https://rladies.github.io/meetup-presentations_lancaster/2020-03-04-shiny/app.R)
 
 ## 2020-02-05 RMarkdown and RStudio Conf
 
